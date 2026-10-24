@@ -47,7 +47,7 @@ The data in `app/seed/data/recipenlg_*.json` is generated from the RecipeNLG-der
 ## Verify
 
 ```bash
-cd backend && python -m pytest          # 175 tests: seed, constraints, API, preferences, ranking, recipe import, units, pricing
+cd backend && python -m pytest          # 190 tests: seed, constraints, API, preferences, ranking, recipe import, units, pricing
 cd frontend && npm run lint && npm run build
 ```
 
@@ -122,7 +122,9 @@ The schema follows the spec, with these additions:
 
 ## Recommendations
 
-`GET /api/v1/recommendations?limit=&offset=` ranks every recipe for the current user's saved preferences. The algorithm is in `app/ranking.py` (pure functions, no database); `app/recommend.py` loads the data.
+`GET /api/v1/recommendations?limit=&offset=&q=` ranks every recipe for the current user's saved preferences. The algorithm is in `app/ranking.py` (pure functions, no database); `app/recommend.py` loads the data.
+
+The optional `q` is the search box on the Discover page. It is live: the list updates as you type, after a short pause, with no button. (Preferences are different: they only apply when you press "Update recommendations".) Every word in it must appear in a recipe's title or description (ignoring case), so `salad` lists everything that says salad and `chicken salad` narrows it. Searching happens before allergy filtering and ranking, so preferences order the matches, and the "hidden by allergies" count only covers recipes that matched.
 
 1. **Allergies filter.** A recipe is dropped if any ingredient lists one of the user's allergens. An ingredient with unreviewed allergen data is not assumed to contain allergens it does not list, so those recipes stay in and are flagged (`unreviewed_ingredients`) for the user to check.
 2. **Everything else ranks.** Each preference the user set (not "don't care") scores a recipe from 0 to 1, and the recipe's score is the weighted average (`WEIGHTS`, equal for now).

@@ -1,4 +1,4 @@
-"""Recipes ranked for the current user's saved preferences."""
+"""Recipes ranked for the current user's saved preferences, optionally narrowed by a text search."""
 
 from fastapi import APIRouter, Query
 
@@ -15,5 +15,6 @@ def get_recommendations(
     db: DbSession,
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
+    q: str | None = Query(default=None, max_length=100, description="Words that must all appear in the title or description"),
 ) -> RecommendationList:
-    return recommend(db, user.preferences, limit, offset)
+    return recommend(db, user.preferences, limit, offset, q)
