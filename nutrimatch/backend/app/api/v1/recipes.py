@@ -55,8 +55,14 @@ def get_recipe(recipe_id: int, db: DbSession) -> RecipeDetail:
                 unit=line.unit,
                 preparation_notes=line.preparation_notes,
                 is_optional=line.is_optional,
+                allergens=line.ingredient.allergens,
+                animal_category=line.ingredient.animal_category,
+                allergens_reviewed=line.ingredient.allergens_reviewed,
             )
         )
+
+    # Each ingredient once, in recipe order, even if the recipe lists it on several lines.
+    unreviewed = list(dict.fromkeys(line.name for line in lines if not line.allergens_reviewed))
 
     summary = RecipeSummary.model_validate(recipe)
     return RecipeDetail(
@@ -66,4 +72,6 @@ def get_recipe(recipe_id: int, db: DbSession) -> RecipeDetail:
         source_url=recipe.source_url,
         ingredients_complete=recipe.ingredients_complete,
         ingredients=lines,
+        unreviewed_ingredients=unreviewed,
+        allergy_info_complete=recipe.ingredients_complete and len(unreviewed) == 0,
     )
