@@ -7,6 +7,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.api.v1 import router as v1_router
 from app.config import get_settings
+from app.pricing.kroger import KrogerError
 
 logger = logging.getLogger("nutrimatch")
 
@@ -26,6 +27,11 @@ def create_app() -> FastAPI:
         # Log the real error; don't leak SQL or connection details to the client.
         logger.exception("Database error", exc_info=exc)
         return JSONResponse(status_code=503, content={"detail": "Database error. Please try again."})
+
+    @app.exception_handler(KrogerError)
+    async def kroger_error_handler(_request: Request, exc: KrogerError) -> JSONResponse:
+        logger.warning("Kroger API error: %s (status %s)", exc.message, exc.status_code)
+        return JSONResponse(status_code=502, content={"detail": exc.message})
 
     app.include_router(v1_router)
     return app

@@ -19,6 +19,18 @@ class Settings(BaseSettings):
     # USDA FoodData Central (https://fdc.nal.usda.gov/api-guide). Optional; used from Phase 3.
     usda_fdc_api_key: str | None = None
 
+    # Kroger Public API (https://developer.kroger.com). Optional; store prices are off without it.
+    kroger_client_id: str | None = None
+    kroger_client_secret: str | None = None
+    kroger_api_base_url: str = "https://api.kroger.com"
+    # How long a looked-up product price is reused before searching again.
+    price_cache_hours: int = 24
+
+    def kroger_configured(self) -> bool:
+        if not self.kroger_client_id or not self.kroger_client_secret:
+            return False
+        return True
+
     def cors_origin_list(self) -> list[str]:
         origins = []
         for raw in self.cors_origins.split(","):

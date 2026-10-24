@@ -154,6 +154,63 @@ def validate_recipes(data: dict, known_ingredients: set[str]) -> list[str]:
     return errors
 
 
+KROGER_TERM_MIN_LENGTH = 3
+KROGER_TERM_MAX_WORDS = 8
+
+
+def validate_pricing(data: dict, known_ingredients: set[str]) -> list[str]:
+    errors: list[str] = []
+
+    for name, term in data.get("search_terms", {}).items():
+        where = f"pricing search_terms['{name}']"
+        if name not in known_ingredients:
+            errors.append(f"{where}: ingredient is not in the catalog")
+        if not isinstance(term, str) or len(term.strip()) < KROGER_TERM_MIN_LENGTH:
+            errors.append(f"{where}: search term must be at least {KROGER_TERM_MIN_LENGTH} characters")
+            continue
+        # Kroger splits on single spaces, so double spaces count as extra words.
+        if len(term.strip().split(" ")) > KROGER_TERM_MAX_WORDS:
+            errors.append(f"{where}: search term has more than {KROGER_TERM_MAX_WORDS} words")
+
+    for name, rules in data.get("match_rules", {}).items():
+        where = f"pricing match_rules['{name}']"
+        if name not in known_ingredients:
+            errors.append(f"{where}: ingredient is not in the catalog")
+        for key in rules:
+            if key not in ("require", "exclude"):
+                errors.append(f"{where}: unknown key '{key}'")
+        for group in rules.get("require", []):
+            if not isinstance(group, list) or len(group) == 0:
+                errors.append(f"{where}: each require group must be a non-empty list of words")
+        if not isinstance(rules.get("exclude", []), list):
+            errors.append(f"{where}: exclude must be a list of words")
+
+    for name in data.get("pantry_staples", []):
+        if name not in known_ingredients:
+            errors.append(f"pricing pantry_staples: '{name}' is not in the catalog")
+
+    for name, reason in data.get("excluded", {}).items():
+        if name not in known_ingredients:
+            errors.append(f"pricing excluded['{name}']: ingredient is not in the catalog")
+        if not isinstance(reason, str) or reason.strip() == "":
+            errors.append(f"pricing excluded['{name}']: needs a reason to show the user")
+
+    return errors
+
+
+def _apply_pricing(ingredients: dict[str, Ingredient], data: dict) -> None:
+    search_terms = data.get("search_terms", {})
+    staples = set(data.get("pantry_staples", []))
+    excluded = data.get("excluded", {})
+    match_rules = data.get("match_rules", {})
+
+    for name, ingredient in ingredients.items():
+        ingredient.price_search_term = search_terms.get(name)
+        ingredient.price_match_rules = match_rules.get(name)
+        ingredient.is_pantry_staple = name in staples
+        ingredient.pricing_excluded_reason = excluded.get(name)
+
+
 def _upsert_ingredients(session: Session, data: dict) -> dict[str, Ingredient]:
     existing = {}
     for ingredient in session.scalars(select(Ingredient)):
@@ -242,6 +299,7 @@ def _ensure_demo_user(session: Session, email: str) -> User:
 def run_seed(session: Session, demo_email: str) -> dict[str, int]:
     ingredient_data = load_json("ingredients.json")
     recipe_data = load_json("recipes.json")
+    pricing_data = load_json("pricing.json")
 
     errors = validate_ingredients(ingredient_data)
     known = set()
@@ -249,10 +307,12 @@ def run_seed(session: Session, demo_email: str) -> dict[str, int]:
         if item.get("normalized_name"):
             known.add(item["normalized_name"])
     errors.extend(validate_recipes(recipe_data, known))
+    errors.extend(validate_pricing(pricing_data, known))
     if len(errors) > 0:
         raise SeedValidationError(errors)
 
     ingredients = _upsert_ingredients(session, ingredient_data)
+    _apply_pricing(ingredients, pricing_data)
     recipe_count = _upsert_recipes(session, recipe_data, ingredients)
     _ensure_demo_user(session, demo_email)
     session.commit()
