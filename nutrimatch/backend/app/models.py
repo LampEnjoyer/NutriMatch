@@ -9,8 +9,8 @@ Follows spec section 8, with these additions:
 - RecipeIngredient.position / is_optional.
 - Recipe.ingredients_complete: False when some ingredient lines could not be structured
   (e.g. an import with free-text measures). Such recipes are never reported allergy-safe.
-- UserPreferences: carbohydrate preference, default servings, per-field hard-limit flags,
-  and optional ranking weights.
+- UserPreferences: coarse levels (nutrient_levels, time_preference, meal_types, meal_size) instead of
+  numeric targets. Allergies are the only hard filter.
 - User.timezone: so daily nutrition totals use the user's calendar day.
 - MealLog.meal_slot, GroceryListItem.notes / source_recipe_ids.
 """
@@ -59,29 +59,19 @@ class UserPreferences(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), unique=True)
 
-    primary_goal: Mapped[str | None] = mapped_column(String(32))
-    protein_target_g: Mapped[float | None] = mapped_column(Float)
-    calorie_target: Mapped[float | None] = mapped_column(Float)
-    fat_target_g: Mapped[float | None] = mapped_column(Float)
-    carbohydrate_preference: Mapped[str | None] = mapped_column(String(32))
-    maximum_cooking_time_min: Mapped[int | None] = mapped_column(Integer)
-    default_servings: Mapped[int | None] = mapped_column(Integer)
-    budget_target_per_serving: Mapped[float | None] = mapped_column(Float)
+    # Soft preferences, keyed by nutrient (see vocab.NUTRIENT_KEYS) with a level from vocab.LEVELS.
+    # A missing key means no preference. A JSON map so a new nutrient needs no migration.
+    nutrient_levels: Mapped[dict[str, str]] = mapped_column(JSON, default=dict)
+    time_preference: Mapped[str | None] = mapped_column(String(16))
+    meal_types: Mapped[list[str]] = mapped_column(JSON, default=list)
+    meal_size: Mapped[str | None] = mapped_column(String(16))
 
     # Lists of vocabulary values (see app.vocab) or ingredient normalized names.
-    dietary_preferences: Mapped[list[str]] = mapped_column(JSON, default=list)
+    # Allergies are the only hard filter; everything above only influences ranking.
     allergies: Mapped[list[str]] = mapped_column(JSON, default=list)
+    dietary_preferences: Mapped[list[str]] = mapped_column(JSON, default=list)
     preferred_ingredients: Mapped[list[str]] = mapped_column(JSON, default=list)
     avoided_ingredients: Mapped[list[str]] = mapped_column(JSON, default=list)
-
-    # Which numeric preferences are non-negotiable filters rather than ranking signals.
-    cooking_time_is_hard_limit: Mapped[bool] = mapped_column(Boolean, default=False)
-    protein_is_hard_limit: Mapped[bool] = mapped_column(Boolean, default=False)
-    calorie_is_hard_limit: Mapped[bool] = mapped_column(Boolean, default=False)
-    fat_is_hard_limit: Mapped[bool] = mapped_column(Boolean, default=False)
-
-    # Optional override of default ranking weights, e.g. {"protein": 2.0, "time": 0.5}.
-    ranking_weights: Mapped[dict[str, float] | None] = mapped_column(JSON)
 
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 

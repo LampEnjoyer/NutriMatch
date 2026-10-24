@@ -21,8 +21,14 @@ DIETS = frozenset({"vegetarian", "vegan", "pescatarian", "gluten_free", "dairy_f
 
 MEAL_TYPES = frozenset({"breakfast", "lunch", "dinner", "snack"})
 
-PRIMARY_GOALS = frozenset({"high_protein", "lower_calorie", "lower_fat", "balanced"})
+# Nutrients a user can state a preference for, and the levels they can choose. Adding a nutrient
+# (carbohydrates, sodium, ...) here and in preference_options.py needs no schema change.
+NUTRIENT_KEYS = frozenset({"protein", "fat", "calories"})
+LEVELS = frozenset({"low", "high", "no_preference"})
 
-CARB_PREFERENCES = frozenset({"low", "moderate", "high", "no_preference"})
+TIME_PREFERENCES = frozenset({"short", "medium", "long"})
+
+# Who the meal is for. Maps to recipe servings when ranking (solo: few servings, family: many).
+MEAL_SIZES = frozenset({"solo", "family"})
 
 SERVING_BASES = frozenset({"per_serving", "per_recipe"})
