@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router'
 import { ApiError, getRecipe } from '../api/client'
 import type { LineCost, RecipeDetail } from '../api/types'
 import { CostPanel } from '../components/CostPanel'
+import { GroceryButton } from '../components/GroceryButton'
 import { IngredientPrice } from '../components/IngredientPrice'
 import { NutritionLabel } from '../components/NutritionLabel'
 import { SaveButton } from '../components/SaveButton'
@@ -77,8 +78,9 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
         {recipe.title}
       </h1>
       {facts.length > 0 ? <p className="mt-3 text-meta">{facts.join(', ')}</p> : null}
-      <div className="mt-4">
+      <div className="mt-4 flex flex-wrap gap-2">
         <SaveButton recipe={recipe} />
+        <GroceryButton recipe={recipe} />
       </div>
       {recipe.description ? (
         <p className="mt-4 max-w-[60ch] font-serif text-lg leading-relaxed">{recipe.description}</p>
