@@ -2,7 +2,7 @@
 
 Recipe discovery, nutrition tracking and grocery lists, ranked against your own goals.
 
-**Status: Phase 1 (foundation).** The schema, migrations, sample data, a read-only recipe API and the app shell are in place. Search and ranking, nutrition calculation, meal logging and grocery lists are not built yet.
+**Status: Phase 1 (foundation) plus store pricing.** The schema, migrations, sample data, a read-only recipe API and the app shell are in place, and recipes can be priced at a Kroger-family store. Search and ranking, nutrition calculation, meal logging and grocery lists are not built yet.
 
 ## Stack
 
@@ -35,21 +35,45 @@ npm run dev
 
 The Vite dev server proxies `/api` to the backend, so no CORS setup is needed in development.
 
-## Verify Phase 1
+## Verify
 
 ```bash
-cd backend && python -m pytest          # 31 tests: seed validation, constraints, API
-cd frontend && npm run build            # type-check and production build
+cd backend && python -m pytest          # 100 tests: seed, constraints, API, units, pricing
+cd frontend && npm run lint && npm run build
 ```
 
-Then open http://localhost:5173: the Discover page lists 22 recipes. Clicking one shows its ingredients, method and an empty nutrition panel.
+Then open http://localhost:5173: the Discover page lists 22 recipes. Clicking one shows its ingredients, method, an empty nutrition panel and the store-cost panel.
+
+## Store prices (Kroger)
+
+Prices come from the [Kroger Public API](https://developer.kroger.com). It's free, and it covers Kroger-family stores (Kroger, Ralphs, Fred Meyer, King Soopers, Harris Teeter and others). Coverage is regional, so not every ZIP code has a store nearby.
+
+1. Sign in at developer.kroger.com, create an application, and give it the `product.compact` scope.
+2. Copy `backend/.env.example` to `backend/.env` and fill in `KROGER_CLIENT_ID` and `KROGER_CLIENT_SECRET`.
+3. Restart the backend, open any recipe, enter a ZIP code in "Cost at the store", and pick a store.
+
+How it works:
+
+- Each ingredient is searched at the chosen store, using the search term and match rules in `app/seed/data/pricing.json`. Rules keep "butter" from matching peanut butter and "milk" from matching almond milk.
+- Among matching products, the cheapest **per ounce, per fluid ounce or per item** wins, not the cheapest package. Sale prices count when they're lower.
+- **This recipe** is the share of each package the recipe uses. **Shopping total** is the whole packages you'd buy. Pantry staples (salt, pepper) are shown but left out of both.
+- Lookups are cached for `PRICE_CACHE_HOURS` (default 24) per ingredient and store. Every price shows its store and fetch time.
+- A line that can't be priced says why: no matching product, no amount listed, nothing to buy, or a unit that can't be converted yet. Examples of the last: "3 tbsp butter" against butter sold by weight, or "2 cloves" against garlic sold by the bulb. Those conversions need the per-ingredient density and piece weights that Phase 3 loads from USDA FoodData Central. Until then, totals are marked incomplete.
+
+Known gaps:
+
+- Whether Kroger's product search returns a product page link wasn't confirmable from public docs. The client uses `productPageURI` if present and otherwise links to a Kroger search for the product.
+- The meaning of `soldBy: WEIGHT` prices hasn't been checked against live data. Those lines are flagged "sold by weight".
+- There is no way yet to swap the chosen product for a different one. `IngredientProductMatch.selected_by = "user"` is in the schema for that.
 
 ## Project layout
 
 ```
 backend/
   app/
-    api/v1/          versioned routes (health, recipes)
+    api/v1/          versioned routes (health, recipes, pricing)
+    pricing/         Kroger client, size parsing, product selection, recipe costing
+    units.py         exact mass/volume conversions
     api/deps.py      DB session and current-user dependencies
     models.py        SQLAlchemy models
     schemas.py       Pydantic response models

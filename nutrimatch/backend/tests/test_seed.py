@@ -121,4 +121,6 @@ def test_seed_creates_demo_user_with_empty_preferences(seeded_db):
     assert user is not None
     assert user.preferences is not None
     assert user.preferences.allergies == []
-    assert user.preferences.protein_target_g is None
+    assert user.preferences.nutrient_levels == {}
+    assert user.preferences.meal_types == []
+    assert user.preferences.time_preference is None
