@@ -299,7 +299,10 @@ function Discover({ questions, initial }: { questions: PreferenceQuestion[]; ini
   return (
     <>
       <SearchBar value={searchText} onChange={setSearchText} />
-      <div className="mt-10 grid gap-10 lg:grid-cols-[18rem_1fr]">
+      <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_18rem]">
+        <section aria-label="Recommended recipes">
+          <Results preferences={saved} query={query} version={version} />
+        </section>
         <aside aria-label="Preferences" className="lg:sticky lg:top-6 lg:self-start">
           <h2 className="mb-4 text-lg font-bold">What are you after?</h2>
           <PreferencesForm
@@ -312,9 +315,6 @@ function Discover({ questions, initial }: { questions: PreferenceQuestion[]; ini
             error={saveError}
           />
         </aside>
-        <section aria-label="Recommended recipes">
-          <Results preferences={saved} query={query} version={version} />
-        </section>
       </div>
     </>
   )

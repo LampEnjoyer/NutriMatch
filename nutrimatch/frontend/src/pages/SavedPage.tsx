@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 
+import { GroceryButton } from '../components/GroceryButton'
 import { SaveButton } from '../components/SaveButton'
 import { StatusMessage } from '../components/StatusMessage'
 import { formatMinutes, titleCase } from '../lib/format'
@@ -51,7 +52,10 @@ export function SavedPage() {
                       ) : null}
                       <p className="mt-2 text-sm text-meta">{facts.join(', ')}</p>
                     </Link>
-                    <SaveButton recipe={recipe} />
+                    <div className="flex shrink-0 flex-col items-end gap-2">
+                      <SaveButton recipe={recipe} />
+                      <GroceryButton recipe={recipe} />
+                    </div>
                   </li>
                 )
               })}
