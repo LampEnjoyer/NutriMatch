@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
 
 import { getPreferenceOptions, getPreferences, getRecommendations, savePreferences } from '../api/client'
@@ -86,8 +86,11 @@ function RecipeRow({ recipe, preferences, showAllergyNote }: RowProps) {
   )
 }
 
-function Notices({ list, preferences }: { list: RecommendationList; preferences: PreferencesInput }) {
+function Notices({ list, preferences, query }: { list: RecommendationList; preferences: PreferencesInput; query: string }) {
   const notices: string[] = []
+  if (query) {
+    notices.push(`Recipes matching "${query}".`)
+  }
   if (list.ranked_by.length > 0) {
     notices.push(`Ranked by ${joinNames(list.ranked_by.map(preferenceName))}.`)
   } else if (list.ignored_preferences.length === 0) {
@@ -118,8 +121,53 @@ function Notices({ list, preferences }: { list: RecommendationList; preferences:
   )
 }
 
-function Results({ preferences }: { preferences: PreferencesInput }) {
-  const first = useAsync(() => getRecommendations(PAGE_SIZE, 0), [])
+function emptyHint(list: RecommendationList, query: string): string {
+  if (list.excluded_for_allergies > 0) {
+    return query
+      ? 'Every recipe matching your search contains an allergen you selected. Change your allergies or search for something else.'
+      : 'Every recipe contains an allergen you selected. Change your allergies to see more.'
+  }
+  return query ? 'Try a different word, or clear the search to see every recipe.' : 'Run the seed script on the backend to load recipes.'
+}
+
+function SearchBar({ applied, onSearch }: { applied: string; onSearch: (query: string) => void }) {
+  const [text, setText] = useState(applied)
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault()
+    onSearch(text.trim())
+  }
+
+  function clear() {
+    setText('')
+    onSearch('')
+  }
+
+  return (
+    <form role="search" onSubmit={handleSubmit} className="mt-8 flex max-w-xl gap-2">
+      <input
+        type="search"
+        value={text}
+        onChange={(event) => setText(event.target.value)}
+        maxLength={100}
+        placeholder="Search recipes, e.g. salad"
+        aria-label="Search recipes"
+        className="min-w-0 flex-1 rounded border border-ink px-3 py-2"
+      />
+      <button type="submit" className="rounded bg-ink px-4 py-2 text-sm font-semibold text-paper hover:bg-meta">
+        Search
+      </button>
+      {applied !== '' ? (
+        <button type="button" onClick={clear} className="text-sm text-meta underline hover:text-ink">
+          Clear search
+        </button>
+      ) : null}
+    </form>
+  )
+}
+
+function Results({ preferences, query }: { preferences: PreferencesInput; query: string }) {
+  const first = useAsync(() => getRecommendations(PAGE_SIZE, 0, query), [])
   const [more, setMore] = useState<RecommendationItem[]>([])
   const [loadingMore, setLoadingMore] = useState(false)
   const [moreError, setMoreError] = useState<string | null>(null)
@@ -142,7 +190,7 @@ function Results({ preferences }: { preferences: PreferencesInput }) {
     setLoadingMore(true)
     setMoreError(null)
     try {
-      const next = await getRecommendations(PAGE_SIZE, items.length)
+      const next = await getRecommendations(PAGE_SIZE, items.length, query)
       setMore((current) => [...current, ...next.items])
     } catch (error) {
       setMoreError(errorMessage(error))
@@ -154,11 +202,9 @@ function Results({ preferences }: { preferences: PreferencesInput }) {
   if (list.total === 0) {
     return (
       <>
-        <Notices list={list} preferences={preferences} />
-        <StatusMessage kind="empty" title="No recipes to show">
-          {list.excluded_for_allergies > 0
-            ? 'Every recipe contains an allergen you selected. Change your allergies to see more.'
-            : 'Run the seed script on the backend to load recipes.'}
+        <Notices list={list} preferences={preferences} query={query} />
+        <StatusMessage kind="empty" title={query ? `No recipes match "${query}"` : 'No recipes to show'}>
+          {emptyHint(list, query)}
         </StatusMessage>
       </>
     )
@@ -166,7 +212,7 @@ function Results({ preferences }: { preferences: PreferencesInput }) {
 
   return (
     <>
-      <Notices list={list} preferences={preferences} />
+      <Notices list={list} preferences={preferences} query={query} />
       <p className="mb-5 text-sm text-meta">
         Showing {items.length} of {list.total} recipes
       </p>
@@ -204,6 +250,8 @@ function Results({ preferences }: { preferences: PreferencesInput }) {
 function Discover({ questions, initial }: { questions: PreferenceQuestion[]; initial: PreferencesInput }) {
   const [saved, setSaved] = useState(initial)
   const [draft, setDraft] = useState(initial)
+  // The search that is currently applied; the text being typed lives in SearchBar until submitted.
+  const [query, setQuery] = useState('')
   // Changing the key remounts Results, which refetches from the first page.
   const [version, setVersion] = useState(0)
   const [saving, setSaving] = useState(false)
@@ -225,23 +273,26 @@ function Discover({ questions, initial }: { questions: PreferenceQuestion[]; ini
   }
 
   return (
-    <div className="mt-10 grid gap-10 lg:grid-cols-[18rem_1fr]">
-      <aside aria-label="Preferences" className="lg:sticky lg:top-6 lg:self-start">
-        <h2 className="mb-4 text-lg font-bold">What are you after?</h2>
-        <PreferencesForm
-          questions={questions}
-          value={draft}
-          onChange={setDraft}
-          onSubmit={apply}
-          dirty={!samePreferences(saved, draft)}
-          saving={saving}
-          error={saveError}
-        />
-      </aside>
-      <section aria-label="Recommended recipes">
-        <Results key={version} preferences={saved} />
-      </section>
-    </div>
+    <>
+      <SearchBar applied={query} onSearch={setQuery} />
+      <div className="mt-10 grid gap-10 lg:grid-cols-[18rem_1fr]">
+        <aside aria-label="Preferences" className="lg:sticky lg:top-6 lg:self-start">
+          <h2 className="mb-4 text-lg font-bold">What are you after?</h2>
+          <PreferencesForm
+            questions={questions}
+            value={draft}
+            onChange={setDraft}
+            onSubmit={apply}
+            dirty={!samePreferences(saved, draft)}
+            saving={saving}
+            error={saveError}
+          />
+        </aside>
+        <section aria-label="Recommended recipes">
+          <Results key={`${version}:${query}`} preferences={saved} query={query} />
+        </section>
+      </div>
+    </>
   )
 }
 
