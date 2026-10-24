@@ -3,7 +3,6 @@ import { NavLink, Outlet } from 'react-router'
 const NAV_ITEMS = [
   { to: '/', label: 'Discover', end: true },
   { to: '/saved', label: 'Saved' },
-  { to: '/today', label: 'Today' },
   { to: '/grocery', label: 'Grocery list' },
   { to: '/settings', label: 'Settings' },
 ]
