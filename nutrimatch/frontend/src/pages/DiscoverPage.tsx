@@ -78,7 +78,7 @@ function RecipeRow({ recipe, preferences, showAllergyNote }: RowProps) {
             <UnreviewedNote names={recipe.unreviewed_ingredients} />
           ) : null}
         </div>
-        <div className="sm:text-right">
+        {/* <div className="sm:text-right">
           {recipe.total_time_min === null ? (
             <p className="text-sm text-meta">Time not listed</p>
           ) : (
@@ -87,7 +87,7 @@ function RecipeRow({ recipe, preferences, showAllergyNote }: RowProps) {
           {recipe.inactive_time_min ? (
             <p className="mt-1 text-sm text-tomato">+ {formatMinutes(recipe.inactive_time_min)} waiting</p>
           ) : null}
-        </div>
+        </div> */}
       </Link>
       <SaveButton recipe={recipe} />
     </li>
@@ -114,11 +114,11 @@ function Notices({ list, preferences, query }: { list: RecommendationList; prefe
       `${list.excluded_for_allergies} ${list.excluded_for_allergies === 1 ? 'recipe is' : 'recipes are'} hidden because they contain an allergen you selected.`,
     )
   }
-  if (preferences.allergies.length > 0 && list.items.some((item) => item.unreviewed_ingredients.length > 0)) {
-    notices.push(
-      'Recipes marked "Check labels" use ingredients whose allergen information is unverified. Check those labels yourself before cooking.',
-    )
-  }
+  // if (preferences.allergies.length > 0 && list.items.some((item) => item.unreviewed_ingredients.length > 0)) {
+  //   notices.push(
+  //     'Recipes marked "Check labels" use ingredients whose allergen information is unverified. Check those labels yourself before cooking.',
+  //   )
+  // }
 
   return (
     <div className="mb-6 space-y-1 text-sm text-meta">
@@ -304,7 +304,7 @@ function Discover({ questions, initial }: { questions: PreferenceQuestion[]; ini
           <Results preferences={saved} query={query} version={version} />
         </section>
         <aside aria-label="Preferences" className="lg:sticky lg:top-6 lg:self-start">
-          <h2 className="mb-4 text-lg font-bold">What are you after?</h2>
+          <h2 className="mb-4 text-xl font-bold">Preferences</h2>
           <PreferencesForm
             questions={questions}
             value={draft}
@@ -325,10 +325,9 @@ export function DiscoverPage() {
 
   return (
     <div>
-      <h1 className="text-4xl font-black tracking-tight [font-stretch:85%] sm:text-5xl">Find something to cook</h1>
+      <h1 className="text-4xl font-black tracking-tight [font-stretch:85%] sm:text-5xl">Find your next meal</h1>
       <p className="mt-3 max-w-[60ch] font-serif text-lg text-meta">
-        Tell us what you are after and the best matches come first. Allergies hide recipes; everything else only
-        changes the order.
+        Pick your preferences and discover tailored recipes.
       </p>
 
       {setup.status === 'loading' ? (

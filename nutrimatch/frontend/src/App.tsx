@@ -17,15 +17,6 @@ export default function App() {
           <Route path="saved" element={<SavedPage />} />
           <Route path="grocery" element={<GroceryPage />} />
           <Route
-            path="settings"
-            element={
-              <PlaceholderPage
-                title="Settings"
-                description="Set optional nutrition targets, diets, allergies and ingredients to prefer or avoid."
-              />
-            }
-          />
-          <Route
             path="*"
             element={<PlaceholderPage title="Page not found" description="Check the address, or go back to Discover." />}
           />
