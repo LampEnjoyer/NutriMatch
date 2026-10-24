@@ -136,8 +136,14 @@ def select(recipes: list[dict], target: int, vocab_size: int, rng: random.Random
     return picked
 
 
+def tidy_title(title: str) -> str:
+    # The source title-cases every word, giving "Jane'S Chili".
+    return re.sub(r"(?<=[A-Za-z0-9.])'S\b", "'s", title)
+
+
 def recipe_entry(recipe: dict) -> dict:
-    slug_base = re.sub(r"[^a-z0-9]+", "-", recipe["title"].lower()).strip("-")[:90]
+    title = tidy_title(recipe["title"])
+    slug_base = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:90]
     ingredients = []
     for line in recipe["lines"]:
         # A container with no stated size has no usable amount: store it as unmeasured.
@@ -150,7 +156,7 @@ def recipe_entry(recipe: dict) -> dict:
         })
     return {
         "slug": f"{slug_base}-{hashlib.sha1(recipe['title'].encode()).hexdigest()[:6]}",
-        "title": recipe["title"],
+        "title": title,
         "meal_type": meal_type(recipe["title"]),
         "servings": recipe["servings"],
         "ingredients": ingredients,
