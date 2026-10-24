@@ -53,8 +53,13 @@ export function getRecipe(id: number): Promise<RecipeDetail> {
   return request<RecipeDetail>(`/recipes/${id}`)
 }
 
-export function getRecommendations(limit = 20, offset = 0): Promise<RecommendationList> {
-  return request<RecommendationList>(`/recommendations?limit=${limit}&offset=${offset}`)
+/** Ranked recipes for the saved preferences. `query` keeps only recipes whose title or description has every word. */
+export function getRecommendations(limit = 20, offset = 0, query = ''): Promise<RecommendationList> {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) })
+  if (query.trim() !== '') {
+    params.set('q', query.trim())
+  }
+  return request<RecommendationList>(`/recommendations?${params.toString()}`)
 }
 
 export function getPreferenceOptions(): Promise<PreferenceOptions> {
