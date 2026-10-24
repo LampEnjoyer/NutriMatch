@@ -2,9 +2,12 @@ import type {
   PreferenceOptions,
   Preferences,
   PreferencesInput,
+  PricingStatus,
+  RecipeCost,
   RecipeDetail,
   RecipeList,
   RecommendationList,
+  Store,
 } from './types'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api/v1'
@@ -68,4 +71,28 @@ export function savePreferences(preferences: PreferencesInput): Promise<Preferen
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(preferences),
   })
+}
+
+export function getPricingStatus(): Promise<PricingStatus> {
+  return request<PricingStatus>('/pricing/status')
+}
+
+export function searchStores(zipCode: string): Promise<Store[]> {
+  return request<Store[]>(`/stores?zip_code=${encodeURIComponent(zipCode)}`)
+}
+
+export function setStore(locationId: string): Promise<Store> {
+  return request<Store>('/preferences/store', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ location_id: locationId }),
+  })
+}
+
+export function getRecipeCost(recipeId: number, servings?: number): Promise<RecipeCost> {
+  let path = `/recipes/${recipeId}/cost`
+  if (servings !== undefined) {
+    path = `${path}?servings=${servings}`
+  }
+  return request<RecipeCost>(path)
 }

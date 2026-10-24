@@ -1,11 +1,14 @@
 import { Link, useParams } from 'react-router'
 
 import { ApiError, getRecipe } from '../api/client'
-import type { RecipeDetail } from '../api/types'
+import type { LineCost, RecipeDetail } from '../api/types'
+import { CostPanel } from '../components/CostPanel'
+import { IngredientPrice } from '../components/IngredientPrice'
 import { NutritionLabel } from '../components/NutritionLabel'
 import { StatusMessage } from '../components/StatusMessage'
 import { formatAmount, formatMinutes, titleCase } from '../lib/format'
 import { useAsync } from '../lib/useAsync'
+import { useRecipePricing } from '../lib/useRecipePricing'
 
 function TimeFacts({ recipe }: { recipe: RecipeDetail }) {
   const items: { label: string; value: string }[] = [
@@ -46,6 +49,16 @@ function AllergenNotice({ recipe }: { recipe: RecipeDetail }) {
 }
 
 function RecipeView({ recipe }: { recipe: RecipeDetail }) {
+  const pricing = useRecipePricing(recipe.id)
+
+  // Index price lines by ingredient position so each one renders under its own ingredient.
+  const priceByPosition = new Map<number, LineCost>()
+  if (pricing.state.status === 'ready' && pricing.state.data.cost !== null) {
+    for (const line of pricing.state.data.cost.lines) {
+      priceByPosition.set(line.position, line)
+    }
+  }
+
   const facts: string[] = []
   if (recipe.cuisine) {
     facts.push(titleCase(recipe.cuisine))
@@ -76,15 +89,19 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
               Ingredients
             </h2>
             <ul className="mt-2">
-              {recipe.ingredients.map((line, index) => (
-                <li key={`${line.ingredient_id}-${index}`} className="border-b border-line py-2">
-                  <span className="font-semibold tabular-nums">{formatAmount(line.quantity, line.unit)}</span>{' '}
-                  <span>{line.name}</span>
-                  {line.preparation_notes ? <span className="text-meta">, {line.preparation_notes}</span> : null}
-                  {line.is_optional ? <span className="text-meta"> (optional)</span> : null}
-                  {line.allergens_reviewed ? null : <span className="text-sm text-tomato"> (allergens unverified)</span>}
-                </li>
-              ))}
+              {recipe.ingredients.map((line, index) => {
+                const price = priceByPosition.get(index)
+                return (
+                  <li key={`${line.ingredient_id}-${index}`} className="border-b border-line py-2">
+                    <span className="font-semibold tabular-nums">{formatAmount(line.quantity, line.unit)}</span>{' '}
+                    <span>{line.name}</span>
+                    {line.preparation_notes ? <span className="text-meta">, {line.preparation_notes}</span> : null}
+                    {line.is_optional ? <span className="text-meta"> (optional)</span> : null}
+                    {line.allergens_reviewed ? null : <span className="text-sm text-tomato"> (allergens unverified)</span>}
+                    {price ? <IngredientPrice line={price} /> : null}
+                  </li>
+                )
+              })}
             </ul>
           </section>
 
@@ -105,6 +122,7 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
 
         <aside className="lg:sticky lg:top-6 lg:self-start">
           <NutritionLabel servings={recipe.servings} />
+          <CostPanel pricing={pricing} />
           <p className="mt-4 text-sm text-meta">Source: {recipe.source_name}</p>
         </aside>
       </div>

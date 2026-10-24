@@ -100,3 +100,68 @@ export interface RecommendationList {
   ranked_by: string[]
   ignored_preferences: string[]
 }
+
+// --- Store pricing ---
+
+export interface Store {
+  provider: string
+  location_id: string
+  name: string
+  chain: string | null
+  address_line: string | null
+  city: string | null
+  state: string | null
+  zip_code: string | null
+}
+
+export interface PricingStatus {
+  configured: boolean
+  provider: string
+  store: Store | null
+}
+
+export interface PricedProduct {
+  description: string
+  brand: string | null
+  size_text: string | null
+  package_price: number
+  regular_price: number | null
+  promo_price: number | null
+  on_sale: boolean
+  sold_by_weight: boolean
+  product_url: string | null
+  image_url: string | null
+  fetched_at: string
+}
+
+export type LineCostStatus = 'priced' | 'not_purchased' | 'unmeasured' | 'no_match' | 'needs_conversion'
+
+export interface LineCost {
+  position: number
+  ingredient_id: number
+  name: string
+  quantity: number | null
+  unit: string | null
+  status: LineCostStatus
+  reason: string | null
+  is_pantry_staple: boolean
+  product: PricedProduct | null
+  used_cost: number | null
+  packages: number | null
+  shopping_cost: number | null
+}
+
+export interface RecipeCost {
+  recipe_id: number
+  servings: number
+  currency: string
+  store: Store
+  recipe_cost: number
+  cost_per_serving: number
+  shopping_total: number
+  pantry_staples_cost: number
+  unpriced_count: number
+  is_complete: boolean
+  oldest_price_at: string | null
+  lines: LineCost[]
+}

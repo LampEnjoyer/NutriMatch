@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app import vocab
 
@@ -163,3 +163,73 @@ class RecommendationList(BaseModel):
     # Preferences that shaped the order, and those that could not be applied because no recipe has the data yet.
     ranked_by: list[str]
     ignored_preferences: list[str]
+
+
+# --- Store pricing ---------------------------------------------------------
+
+
+class StoreOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    provider: str = "kroger"
+    location_id: str
+    name: str
+    chain: str | None
+    address_line: str | None
+    city: str | None
+    state: str | None
+    zip_code: str | None
+
+
+class PricingStatus(BaseModel):
+    configured: bool
+    provider: str
+    store: StoreOut | None
+
+
+class SetStoreRequest(BaseModel):
+    location_id: str = Field(pattern=r"^[A-Za-z0-9]{8}$", description="8-character Kroger locationId")
+
+
+class ProductOut(BaseModel):
+    description: str
+    brand: str | None
+    size_text: str | None
+    package_price: float
+    regular_price: float | None
+    promo_price: float | None
+    on_sale: bool
+    sold_by_weight: bool
+    product_url: str | None
+    image_url: str | None
+    fetched_at: datetime
+
+
+class LineCostOut(BaseModel):
+    position: int
+    ingredient_id: int
+    name: str
+    quantity: float | None
+    unit: str | None
+    status: Literal["priced", "not_purchased", "unmeasured", "no_match", "needs_conversion"]
+    reason: str | None
+    is_pantry_staple: bool
+    product: ProductOut | None
+    used_cost: float | None
+    packages: int | None
+    shopping_cost: float | None
+
+
+class RecipeCostOut(BaseModel):
+    recipe_id: int
+    servings: int
+    currency: str = "USD"
+    store: StoreOut
+    recipe_cost: float
+    cost_per_serving: float
+    shopping_total: float
+    pantry_staples_cost: float
+    unpriced_count: int
+    is_complete: bool
+    oldest_price_at: datetime | None
+    lines: list[LineCostOut]

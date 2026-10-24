@@ -13,6 +13,8 @@ Follows spec section 8, with these additions:
   numeric targets. Allergies are the only hard filter.
 - User.timezone: so daily nutrition totals use the user's calendar day.
 - MealLog.meal_slot, GroceryListItem.notes / source_recipe_ids.
+- Store, ProductPrice, IngredientProductMatch and Ingredient pricing fields: retailer prices
+  (Kroger), always tied to a store and a fetch time.
 """
 
 from datetime import UTC, datetime
@@ -31,6 +33,7 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql.expression import false
 
 from app.db import Base
 
@@ -73,9 +76,14 @@ class UserPreferences(Base):
     preferred_ingredients: Mapped[list[str]] = mapped_column(JSON, default=list)
     avoided_ingredients: Mapped[list[str]] = mapped_column(JSON, default=list)
 
+    preferred_store_id: Mapped[int | None] = mapped_column(
+        ForeignKey("stores.id", ondelete="SET NULL", name="fk_user_preferences_preferred_store_id")
+    )
+
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
     user: Mapped[User] = relationship(back_populates="preferences")
+    preferred_store: Mapped["Store | None"] = relationship()
 
 
 class Recipe(Base):
@@ -139,6 +147,17 @@ class Ingredient(Base):
     animal_category: Mapped[str] = mapped_column(String(16), default="none")
     # False means allergens above are not known to be complete; treat as "unknown", not "safe".
     allergens_reviewed: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    # Pricing. search term defaults to normalized_name when null.
+    price_search_term: Mapped[str | None] = mapped_column(String(120))
+    # Salt, pepper and the like: shown, but left out of the shopping total by default.
+    is_pantry_staple: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+    # When set, the ingredient is never priced, and this is shown instead (e.g. water).
+    pricing_excluded_reason: Mapped[str | None] = mapped_column(String(200))
+    # Optional overrides for which search results count as this ingredient:
+    # {"require": [["chickpea", "garbanzo"], ...], "exclude": ["peanut", ...]}.
+    # Each "require" group needs at least one of its words in the product description.
+    price_match_rules: Mapped[dict | None] = mapped_column(JSON)
 
 
 class RecipeIngredient(Base):
@@ -246,3 +265,72 @@ class GroceryListItem(Base):
 
     grocery_list: Mapped[GroceryList] = relationship(back_populates="items")
     ingredient: Mapped[Ingredient] = relationship()
+
+
+class Store(Base):
+    """A physical store whose prices we've looked up. Prices only exist per store."""
+
+    __tablename__ = "stores"
+    __table_args__ = (UniqueConstraint("provider", "location_id", name="uq_stores_provider_location"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    provider: Mapped[str] = mapped_column(String(32))  # "kroger"
+    location_id: Mapped[str] = mapped_column(String(32))
+    name: Mapped[str] = mapped_column(String(200))
+    chain: Mapped[str | None] = mapped_column(String(100))
+    address_line: Mapped[str | None] = mapped_column(String(200))
+    city: Mapped[str | None] = mapped_column(String(100))
+    state: Mapped[str | None] = mapped_column(String(32))
+    zip_code: Mapped[str | None] = mapped_column(String(16))
+
+
+class ProductPrice(Base):
+    """One retailer product at one store, as returned by the retailer's API at fetched_at."""
+
+    __tablename__ = "product_prices"
+    __table_args__ = (
+        UniqueConstraint("store_id", "provider_product_id", name="uq_product_prices_store_product"),
+        CheckConstraint("regular_price IS NULL OR regular_price >= 0", name="ck_product_prices_regular_nonnegative"),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    store_id: Mapped[int] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), index=True)
+    provider_product_id: Mapped[str] = mapped_column(String(32))
+    description: Mapped[str] = mapped_column(String(300))
+    brand: Mapped[str | None] = mapped_column(String(120))
+    size_text: Mapped[str | None] = mapped_column(String(64))
+    # Parsed from size_text; null when the text couldn't be parsed.
+    package_quantity: Mapped[float | None] = mapped_column(Float)
+    package_unit: Mapped[str | None] = mapped_column(String(16))
+    sold_by: Mapped[str | None] = mapped_column(String(32))
+    regular_price: Mapped[float | None] = mapped_column(Float)
+    # Null when there's no sale (Kroger reports 0 for "no promo").
+    promo_price: Mapped[float | None] = mapped_column(Float)
+    product_url: Mapped[str | None] = mapped_column(String(500))
+    image_url: Mapped[str | None] = mapped_column(String(500))
+    fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+    store: Mapped[Store] = relationship()
+
+
+class IngredientProductMatch(Base):
+    """Which product we use to price an ingredient at a store.
+
+    product_price_id is null when a search ran but found nothing usable, so we don't
+    re-search on every page load.
+    """
+
+    __tablename__ = "ingredient_product_matches"
+    __table_args__ = (UniqueConstraint("ingredient_id", "store_id", name="uq_ingredient_product_match"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ingredient_id: Mapped[int] = mapped_column(ForeignKey("ingredients.id", ondelete="CASCADE"))
+    store_id: Mapped[int] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"))
+    product_price_id: Mapped[int | None] = mapped_column(ForeignKey("product_prices.id", ondelete="SET NULL"))
+    selected_by: Mapped[str] = mapped_column(String(16), default="auto")  # "auto" or "user"
+    search_term: Mapped[str] = mapped_column(String(120))
+    candidates_considered: Mapped[int] = mapped_column(Integer, default=0)
+    searched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+    ingredient: Mapped[Ingredient] = relationship()
+    product: Mapped[ProductPrice | None] = relationship()

@@ -1,3 +1,5 @@
+import type { Store } from '../api/types'
+
 const UNIT_LABELS: Record<string, string> = {
   g: 'g',
   kg: 'kg',
@@ -72,6 +74,46 @@ export function formatAmount(quantity: number | null, unit: string | null): stri
     label = `${label}s`
   }
   return `${amount} ${label}`
+}
+
+const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+
+export function formatMoney(value: number): string {
+  return USD.format(value)
+}
+
+/** "3:12 PM" for today, otherwise "Oct 22, 3:12 PM". */
+export function formatFetchedAt(iso: string): string {
+  const fetched = new Date(iso)
+  const now = new Date()
+  const time = fetched.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+  if (fetched.toDateString() === now.toDateString()) {
+    return time
+  }
+  const day = fetched.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return `${day}, ${time}`
+}
+
+export function storeAddress(store: Store): string {
+  const parts: string[] = []
+  if (store.address_line) {
+    parts.push(store.address_line)
+  }
+  let cityLine = ''
+  if (store.city) {
+    cityLine = store.city
+  }
+  if (store.state) {
+    if (cityLine === '') {
+      cityLine = store.state
+    } else {
+      cityLine = `${cityLine}, ${store.state}`
+    }
+  }
+  if (cityLine !== '') {
+    parts.push(cityLine)
+  }
+  return parts.join(', ')
 }
 
 export function titleCase(value: string): string {
