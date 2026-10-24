@@ -1,18 +1,26 @@
-import os, httpx, sqlite3, pandas as pd
+import os, time, httpx, sqlite3, pandas as pd
 from pathlib import Path
 from dotenv import load_dotenv
 
 env_path = Path(__file__).resolve().parent.parent.parent / '.env'
+load_dotenv(dotenv_path=env_path)
+api_key = os.getenv("USDA_KEY")
+if not api_key:
+    raise SystemExit("USDA_KEY not found in .env")
 
 conn = sqlite3.connect("../nutrimatch.db")
 
-df = pd.read_sql("SELECT id, normalized_name, default_unit FROM ingredients WHERE fdc_id IS NULL ORDER BY normalized_name;", conn)
-
-load_dotenv(dotenv_path=env_path)
-
-api_key = os.getenv("USDA_KEY")
+df = pd.read_sql(
+    "SELECT id, normalized_name, default_unit FROM ingredients WHERE fdc_id IS NULL ORDER BY normalized_name;",
+    conn,
+)
 
 BASE_URL = "https://api.nal.usda.gov/fdc/v1"
+
+BAD_WORDS = ["prepared", "frozen", "babyfood", "baby food", "restaurant", "fast food",
+             "breaded", "roll", "sliced", "deli", "flavored", "sweetened", "mix",
+             "infant", "imitation", "dehydrated", "substitute"]
+
 
 def search_foods(query: str, page_size: int = 10) -> list[dict]:
     response = httpx.get(
@@ -23,31 +31,37 @@ def search_foods(query: str, page_size: int = 10) -> list[dict]:
             "dataType": "Foundation,SR Legacy",
             "pageSize": page_size,
         },
+        timeout=30,
     )
     response.raise_for_status()
     return response.json().get("foods", [])
 
+
+def pick_first_good(foods):
+    for f in foods:
+        d = f["description"].lower()
+        if not any(w in d for w in BAD_WORDS):
+            return f
+    return foods[0] if foods else None
+
+
+print(f"{len(df)} ingredients to match")
+
 for row in df.itertuples():
-    query = row.normalized_name
-    while True:
-        foods = search_foods(query)
-        print(f"\n=== {row.normalized_name} (searching: '{query}') ===")
-        for i, food in enumerate(foods, 1):
-            print(f"{i:>2}. {food['fdcId']} | {food['dataType']} | {food['description']}")
+    try:
+        foods = search_foods(row.normalized_name)
+    except httpx.HTTPError as exc:
+        print(f"ERROR {row.normalized_name}: {exc}")
+        continue
 
-        choice = input("number to save, s = skip, q = quit, or type a new search: ").strip()
+    picked = pick_first_good(foods)
+    if picked is None:
+        print(f"NONE  {row.normalized_name}")
+        continue
 
-        if choice.lower() == "q":
-            conn.close()
-            raise SystemExit
-        if choice.lower() == "s":
-            break
-        if choice.isdigit() and 1 <= int(choice) <= len(foods):
-            fdc_id = foods[int(choice) - 1]["fdcId"]
-            conn.execute("UPDATE ingredients SET fdc_id = ? WHERE id = ?", (fdc_id, row.id))
-            conn.commit()
-            print(f"saved {fdc_id}")
-            break
-        query = choice   # anything else is treated as a new search term
+    conn.execute("UPDATE ingredients SET fdc_id = ? WHERE id = ?", (picked["fdcId"], row.id))
+    conn.commit()
+    print(f"{row.normalized_name:<24} -> {picked['fdcId']} | {picked['description']}")
+    time.sleep(0.2)
 
-conn.close()
+conn.close()    
