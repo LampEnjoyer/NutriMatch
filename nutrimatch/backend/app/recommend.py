@@ -4,7 +4,7 @@ The ranking itself lives in app.ranking. Per-serving nutrition is read from Nutr
 without a row simply have no value, and ranking treats that as unknown.
 """
 
-from sqlalchemy import select
+from sqlalchemy import ColumnElement, or_, select
 from sqlalchemy.orm import Session, defer
 
 from app.models import Ingredient, NutritionFacts, Recipe, RecipeIngredient, UserPreferences
@@ -30,9 +30,27 @@ def to_ranking_preferences(preferences: UserPreferences | None) -> RankingPrefer
     )
 
 
-def load_features(db: Session) -> list[RecipeFeatures]:
+def _like_pattern(word: str) -> str:
+    """A contains-pattern for `word` in which %, _ and \\ match themselves."""
+    escaped = word.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+    return f"%{escaped}%"
+
+
+def search_conditions(query: str | None) -> list[ColumnElement[bool]]:
+    """One condition per word: it must appear in the title or description, ignoring case."""
+    conditions = []
+    for word in (query or "").split():
+        pattern = _like_pattern(word)
+        conditions.append(or_(Recipe.title.ilike(pattern, escape="\\"), Recipe.description.ilike(pattern, escape="\\")))
+    return conditions
+
+
+def load_features(db: Session, query: str | None = None) -> list[RecipeFeatures]:
     # Instructions are the bulk of a recipe row and ranking never needs them.
-    recipes = db.scalars(select(Recipe).options(defer(Recipe.instructions))).all()
+    statement = select(Recipe).options(defer(Recipe.instructions))
+    for condition in search_conditions(query):
+        statement = statement.where(condition)
+    recipes = db.scalars(statement).all()
 
     ingredients: dict[int, list[IngredientInfo]] = {}
     lines = db.execute(
@@ -65,8 +83,11 @@ def load_features(db: Session) -> list[RecipeFeatures]:
     ]
 
 
-def recommend(db: Session, preferences: UserPreferences | None, limit: int, offset: int) -> RecommendationList:
-    result = rank_recipes(load_features(db), to_ranking_preferences(preferences))
+def recommend(
+    db: Session, preferences: UserPreferences | None, limit: int, offset: int, query: str | None = None
+) -> RecommendationList:
+    # Searching narrows the pool first, so ranking compares recipes among the matches.
+    result = rank_recipes(load_features(db, query), to_ranking_preferences(preferences))
     page = result.ranked[offset : offset + limit]
 
     recipes = {r.id: r for r in db.scalars(select(Recipe).where(Recipe.id.in_([p.recipe.id for p in page])))}

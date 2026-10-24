@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 
 import { getPreferenceOptions, getPreferences, getRecommendations, savePreferences } from '../api/client'
@@ -10,8 +10,11 @@ import { formatMinutes, titleCase } from '../lib/format'
 import { matchChips, preferenceName } from '../lib/matches'
 import { samePreferences, toInput } from '../lib/preferences'
 import { useAsync } from '../lib/useAsync'
+import { useDebouncedValue } from '../lib/useDebouncedValue'
 
 const PAGE_SIZE = 20
+// How long typing must pause before the search runs.
+const SEARCH_DELAY_MS = 250
 // Unreviewed ingredients are listed up to this many by name on a result; the rest are counted.
 const NAMED_UNREVIEWED = 3
 
@@ -135,35 +138,20 @@ function emptyHint(list: RecommendationList, query: string): string {
   return query ? 'Try a different word, or clear the search to see every recipe.' : 'Run the seed script on the backend to load recipes.'
 }
 
-function SearchBar({ applied, onSearch }: { applied: string; onSearch: (query: string) => void }) {
-  const [text, setText] = useState(applied)
-
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault()
-    onSearch(text.trim())
-  }
-
-  function clear() {
-    setText('')
-    onSearch('')
-  }
-
+function SearchBar({ value, onChange }: { value: string; onChange: (text: string) => void }) {
   return (
-    <form role="search" onSubmit={handleSubmit} className="mt-8 flex max-w-xl gap-2">
+    <form role="search" onSubmit={(event) => event.preventDefault()} className="mt-8 flex max-w-xl items-center gap-3">
       <input
         type="search"
-        value={text}
-        onChange={(event) => setText(event.target.value)}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
         maxLength={100}
         placeholder="Search recipes, e.g. salad"
         aria-label="Search recipes"
         className="min-w-0 flex-1 rounded border border-ink px-3 py-2"
       />
-      <button type="submit" className="rounded bg-ink px-4 py-2 text-sm font-semibold text-paper hover:bg-meta">
-        Search
-      </button>
-      {applied !== '' ? (
-        <button type="button" onClick={clear} className="text-sm text-meta underline hover:text-ink">
+      {value !== '' ? (
+        <button type="button" onClick={() => onChange('')} className="text-sm text-meta underline hover:text-ink">
           Clear search
         </button>
       ) : null}
@@ -171,15 +159,39 @@ function SearchBar({ applied, onSearch }: { applied: string; onSearch: (query: s
   )
 }
 
-function Results({ preferences, query }: { preferences: PreferencesInput; query: string }) {
-  const first = useAsync(() => getRecommendations(PAGE_SIZE, 0, query), [])
-  const [more, setMore] = useState<RecommendationItem[]>([])
+interface ShownResults {
+  list: RecommendationList
+  preferences: PreferencesInput
+  query: string
+  // Identifies the request that produced `list`: any change to it starts a fresh first page.
+  signature: string
+}
+
+interface ResultsProps {
+  preferences: PreferencesInput
+  query: string
+  // Bumped whenever saved preferences change, so the list is fetched again.
+  version: number
+}
+
+function Results({ preferences, query, version }: ResultsProps) {
+  const signature = `${version}:${query}`
+  const first = useAsync(() => getRecommendations(PAGE_SIZE, 0, query), [signature])
+  // The last list that finished loading. It stays on screen, dimmed, while the next one loads.
+  const [shown, setShown] = useState<ShownResults | null>(null)
+  // Pages after the first, tagged with the request they belong to so a new search discards them.
+  const [extra, setExtra] = useState<{ signature: string; items: RecommendationItem[] }>({ signature: '', items: [] })
   const [loadingMore, setLoadingMore] = useState(false)
   const [moreError, setMoreError] = useState<string | null>(null)
 
-  if (first.status === 'loading') {
-    return <StatusMessage kind="loading" title="Finding recipes…" />
-  }
+  useEffect(() => {
+    if (first.status === 'ready') {
+      setShown({ list: first.data, preferences, query, signature })
+    }
+    // `first` only turns ready for the latest request, when the props above are the matching ones.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [first])
+
   if (first.status === 'error') {
     return (
       <StatusMessage kind="error" title="Recommendations didn't load">
@@ -187,16 +199,23 @@ function Results({ preferences, query }: { preferences: PreferencesInput; query:
       </StatusMessage>
     )
   }
+  if (shown === null) {
+    return <StatusMessage kind="loading" title="Finding recipes…" />
+  }
 
-  const list = first.data
-  const items = [...list.items, ...more]
+  const busy = first.status === 'loading'
+  const { list } = shown
+  const items = [...list.items, ...(extra.signature === shown.signature ? extra.items : [])]
 
-  async function loadMore() {
+  async function loadMore(current: ShownResults) {
     setLoadingMore(true)
     setMoreError(null)
     try {
-      const next = await getRecommendations(PAGE_SIZE, items.length, query)
-      setMore((current) => [...current, ...next.items])
+      const next = await getRecommendations(PAGE_SIZE, items.length, current.query)
+      setExtra((previous) => ({
+        signature: current.signature,
+        items: previous.signature === current.signature ? [...previous.items, ...next.items] : next.items,
+      }))
     } catch (error) {
       setMoreError(errorMessage(error))
     } finally {
@@ -204,60 +223,60 @@ function Results({ preferences, query }: { preferences: PreferencesInput; query:
     }
   }
 
-  if (list.total === 0) {
-    return (
-      <>
-        <Notices list={list} preferences={preferences} query={query} />
-        <StatusMessage kind="empty" title={query ? `No recipes match "${query}"` : 'No recipes to show'}>
-          {emptyHint(list, query)}
-        </StatusMessage>
-      </>
-    )
-  }
-
   return (
-    <>
-      <Notices list={list} preferences={preferences} query={query} />
-      <p className="mb-5 text-sm text-meta">
-        Showing {items.length} of {list.total} recipes
-      </p>
-      <ul>
-        {items.map((recipe) => (
-          <RecipeRow
-            key={recipe.id}
-            recipe={recipe}
-            preferences={preferences}
-            showAllergyNote={preferences.allergies.length > 0}
-          />
-        ))}
-      </ul>
-      {items.length < list.total ? (
-        <div className="mt-6">
-          <button
-            type="button"
-            onClick={loadMore}
-            disabled={loadingMore}
-            className="rounded border border-ink px-4 py-2 text-sm font-semibold hover:bg-ink hover:text-paper disabled:opacity-40"
-          >
-            {loadingMore ? 'Loading…' : 'Show more'}
-          </button>
-          {moreError ? (
-            <p role="alert" className="mt-2 text-sm text-tomato">
-              {moreError}
-            </p>
+    <div aria-busy={busy} className={busy ? 'opacity-50 transition-opacity' : 'transition-opacity'}>
+      <Notices list={list} preferences={shown.preferences} query={shown.query} />
+      {list.total === 0 ? (
+        <StatusMessage
+          kind="empty"
+          title={shown.query ? `No recipes match "${shown.query}"` : 'No recipes to show'}
+        >
+          {emptyHint(list, shown.query)}
+        </StatusMessage>
+      ) : (
+        <>
+          <p className="mb-5 text-sm text-meta">
+            Showing {items.length} of {list.total} recipes
+          </p>
+          <ul>
+            {items.map((recipe) => (
+              <RecipeRow
+                key={recipe.id}
+                recipe={recipe}
+                preferences={shown.preferences}
+                showAllergyNote={shown.preferences.allergies.length > 0}
+              />
+            ))}
+          </ul>
+          {items.length < list.total ? (
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={() => loadMore(shown)}
+                disabled={loadingMore || busy}
+                className="rounded border border-ink px-4 py-2 text-sm font-semibold hover:bg-ink hover:text-paper disabled:opacity-40"
+              >
+                {loadingMore ? 'Loading…' : 'Show more'}
+              </button>
+              {moreError ? (
+                <p role="alert" className="mt-2 text-sm text-tomato">
+                  {moreError}
+                </p>
+              ) : null}
+            </div>
           ) : null}
-        </div>
-      ) : null}
-    </>
+        </>
+      )}
+    </div>
   )
 }
 
 function Discover({ questions, initial }: { questions: PreferenceQuestion[]; initial: PreferencesInput }) {
   const [saved, setSaved] = useState(initial)
   const [draft, setDraft] = useState(initial)
-  // The search that is currently applied; the text being typed lives in SearchBar until submitted.
-  const [query, setQuery] = useState('')
-  // Changing the key remounts Results, which refetches from the first page.
+  // The search runs as you type (after a short pause). Preferences only apply when "Update recommendations" is pressed.
+  const [searchText, setSearchText] = useState('')
+  const query = useDebouncedValue(searchText.trim(), SEARCH_DELAY_MS)
   const [version, setVersion] = useState(0)
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -279,7 +298,7 @@ function Discover({ questions, initial }: { questions: PreferenceQuestion[]; ini
 
   return (
     <>
-      <SearchBar applied={query} onSearch={setQuery} />
+      <SearchBar value={searchText} onChange={setSearchText} />
       <div className="mt-10 grid gap-10 lg:grid-cols-[18rem_1fr]">
         <aside aria-label="Preferences" className="lg:sticky lg:top-6 lg:self-start">
           <h2 className="mb-4 text-lg font-bold">What are you after?</h2>
@@ -294,7 +313,7 @@ function Discover({ questions, initial }: { questions: PreferenceQuestion[]; ini
           />
         </aside>
         <section aria-label="Recommended recipes">
-          <Results key={`${version}:${query}`} preferences={saved} query={query} />
+          <Results preferences={saved} query={query} version={version} />
         </section>
       </div>
     </>
