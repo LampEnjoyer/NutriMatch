@@ -125,7 +125,7 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
         </div>
 
         <aside className="lg:sticky lg:top-6 lg:self-start">
-          <NutritionLabel servings={recipe.servings} />
+          <NutritionLabel servings={recipe.servings} nutrition={recipe.nutrition} />
           <CostPanel pricing={pricing} />
           <p className="mt-4 text-sm text-meta">Source: {recipe.source_name}</p>
         </aside>

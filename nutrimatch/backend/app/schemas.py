@@ -36,6 +36,22 @@ class RecipeIngredientOut(BaseModel):
     # False means the allergens above are not known to be complete (blended or branded products).
     allergens_reviewed: bool
 
+#Nutrition
+class NutritionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    serving_basis: str
+    calories: float | None
+    protein_g: float | None
+    carbohydrates_g: float | None
+    fat_g: float | None
+    saturated_fat_g: float | None
+    fiber_g: float | None
+    sugar_g: float | None
+    sodium_mg: float | None
+    data_source: str
+    is_estimated: bool
+    excluded_ingredients: list[str]
 
 class RecipeDetail(RecipeSummary):
     instructions: list[str]
@@ -47,6 +63,7 @@ class RecipeDetail(RecipeSummary):
     unreviewed_ingredients: list[str]
     # True only when every ingredient is structured and has reviewed allergen data.
     allergy_info_complete: bool
+    nutrition: NutritionOut | None = None
 
 
 class RecipeList(BaseModel):
@@ -233,3 +250,5 @@ class RecipeCostOut(BaseModel):
     is_complete: bool
     oldest_price_at: datetime | None
     lines: list[LineCostOut]
+
+

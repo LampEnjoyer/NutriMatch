@@ -15,6 +15,22 @@ export interface RecipeSummary {
   image_url: string | null
 }
 
+export interface Nutrition {
+  serving_basis: string
+  calories: number | null
+  protein_g: number | null
+  carbohydrates_g: number | null
+  fat_g: number | null
+  saturated_fat_g: number | null
+  fiber_g: number | null
+  sugar_g: number | null
+  sodium_mg: number | null
+  data_source: string
+  is_estimated: boolean
+  excluded_ingredients: string[]
+  
+}
+
 export interface RecipeIngredient {
   ingredient_id: number
   name: string
@@ -38,6 +54,7 @@ export interface RecipeDetail extends RecipeSummary {
   // Ingredients with unverified allergen data; the user should check those labels.
   unreviewed_ingredients: string[]
   allergy_info_complete: boolean
+  nutrition: Nutrition | null
 }
 
 export interface RecipeList {

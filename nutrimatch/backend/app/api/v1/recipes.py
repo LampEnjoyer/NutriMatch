@@ -10,7 +10,10 @@ from sqlalchemy.orm import selectinload
 
 from app.api.deps import DbSession
 from app.models import Recipe, RecipeIngredient
-from app.schemas import ErrorResponse, RecipeDetail, RecipeIngredientOut, RecipeList, RecipeSummary
+from app.schemas import (
+    ErrorResponse, NutritionOut, RecipeDetail, RecipeIngredientOut, RecipeList, RecipeSummary,
+)
+
 
 router = APIRouter(prefix="/recipes", tags=["recipes"])
 
@@ -39,7 +42,10 @@ def get_recipe(recipe_id: int, db: DbSession) -> RecipeDetail:
     recipe = db.scalar(
         select(Recipe)
         .where(Recipe.id == recipe_id)
-        .options(selectinload(Recipe.ingredients).selectinload(RecipeIngredient.ingredient))
+        .options(
+            selectinload(Recipe.ingredients).selectinload(RecipeIngredient.ingredient),
+            selectinload(Recipe.nutrition),
+        )
     )
     if recipe is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Recipe {recipe_id} not found")
@@ -63,8 +69,12 @@ def get_recipe(recipe_id: int, db: DbSession) -> RecipeDetail:
 
     # Each ingredient once, in recipe order, even if the recipe lists it on several lines.
     unreviewed = list(dict.fromkeys(line.name for line in lines if not line.allergens_reviewed))
-
+    per_serving = None
+    for row in recipe.nutrition:
+        if row.serving_basis == "per_serving":
+            per_serving = NutritionOut.model_validate(row)
     summary = RecipeSummary.model_validate(recipe)
+
     return RecipeDetail(
         **summary.model_dump(),
         instructions=recipe.instructions,
@@ -74,4 +84,5 @@ def get_recipe(recipe_id: int, db: DbSession) -> RecipeDetail:
         ingredients=lines,
         unreviewed_ingredients=unreviewed,
         allergy_info_complete=recipe.ingredients_complete and len(unreviewed) == 0,
+        nutrition=per_serving,
     )
