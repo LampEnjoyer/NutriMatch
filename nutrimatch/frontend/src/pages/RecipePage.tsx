@@ -5,6 +5,7 @@ import type { LineCost, RecipeDetail } from '../api/types'
 import { CostPanel } from '../components/CostPanel'
 import { IngredientPrice } from '../components/IngredientPrice'
 import { NutritionLabel } from '../components/NutritionLabel'
+import { SaveButton } from '../components/SaveButton'
 import { StatusMessage } from '../components/StatusMessage'
 import { formatAmount, formatMinutes, titleCase } from '../lib/format'
 import { useAsync } from '../lib/useAsync'
@@ -76,6 +77,9 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
         {recipe.title}
       </h1>
       {facts.length > 0 ? <p className="mt-3 text-meta">{facts.join(', ')}</p> : null}
+      <div className="mt-4">
+        <SaveButton recipe={recipe} />
+      </div>
       {recipe.description ? (
         <p className="mt-4 max-w-[60ch] font-serif text-lg leading-relaxed">{recipe.description}</p>
       ) : null}

@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { getPreferenceOptions, getPreferences, getRecommendations, savePreferences } from '../api/client'
 import type { PreferenceQuestion, PreferencesInput, RecommendationItem, RecommendationList } from '../api/types'
 import { PreferencesForm } from '../components/PreferencesForm'
+import { SaveButton } from '../components/SaveButton'
 import { StatusMessage } from '../components/StatusMessage'
 import { formatMinutes, titleCase } from '../lib/format'
 import { matchChips, preferenceName } from '../lib/matches'
@@ -50,8 +51,11 @@ function RecipeRow({ recipe, preferences, showAllergyNote }: RowProps) {
   const chips = matchChips(recipe, preferences)
 
   return (
-    <li className="border-b border-line py-5 first:pt-0">
-      <Link to={`/recipes/${recipe.id}`} className="group grid gap-x-8 gap-y-2 sm:grid-cols-[1fr_9rem]">
+    <li className="flex items-start gap-4 border-b border-line py-5 first:pt-0">
+      <Link
+        to={`/recipes/${recipe.id}`}
+        className="group grid min-w-0 flex-1 gap-x-8 gap-y-2 sm:grid-cols-[1fr_9rem]"
+      >
         <div>
           <h2 className="text-xl font-bold leading-snug group-hover:underline">{recipe.title}</h2>
           {recipe.description ? (
@@ -82,6 +86,7 @@ function RecipeRow({ recipe, preferences, showAllergyNote }: RowProps) {
           ) : null}
         </div>
       </Link>
+      <SaveButton recipe={recipe} />
     </li>
   )
 }
