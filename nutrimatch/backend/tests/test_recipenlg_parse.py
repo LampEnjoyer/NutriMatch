@@ -1,5 +1,6 @@
 import pytest
 
+from tools.recipenlg.build import tidy_title
 from tools.recipenlg.parse import parse_ingredient, parse_recipe
 
 
@@ -62,3 +63,11 @@ def test_parse_recipe_without_a_servings_line_has_none():
 
 def test_parse_recipe_rejects_text_without_the_expected_sections():
     assert parse_recipe("Just a title and some words") is None
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [("Jane'S Chili(Good!)", "Jane's Chili(Good!)"), ("Aunt Marie'S Unbeatables", "Aunt Marie's Unbeatables"), ("K.C.'S Broccoli Salad", "K.C.'s Broccoli Salad"), ("Early 1900'S", "Early 1900's"), ("Mac 'N Cheese", "Mac 'N Cheese")],
+)
+def test_tidy_title_fixes_possessive_capitalisation_only(raw, expected):
+    assert tidy_title(raw) == expected

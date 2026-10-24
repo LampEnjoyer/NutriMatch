@@ -2,7 +2,7 @@
 
 Recipe discovery, nutrition tracking and grocery lists, ranked against your own goals.
 
-**Status: Phase 1 (foundation).** The schema, migrations, sample data, a read-only recipe API and the app shell are in place. Search and ranking, nutrition calculation, meal logging and grocery lists are not built yet.
+**Status: Phase 1 (foundation).** The schema, migrations, sample and imported recipes, a recipe API, the preferences form and preference-based ranking are in place. Nutrition calculation, search, meal logging and grocery lists are not built yet.
 
 ## Stack
 
@@ -47,11 +47,13 @@ The data in `app/seed/data/recipenlg_*.json` is generated from the RecipeNLG-der
 ## Verify Phase 1
 
 ```bash
-cd backend && python -m pytest          # 101 tests: seed validation, constraints, API, preferences, ranking, recipe import
+cd backend && python -m pytest          # 106 tests: seed validation, constraints, API, preferences, ranking, recipe import
 cd frontend && npm run build            # type-check and production build
 ```
 
-Then open http://localhost:5173: the Discover page lists 22 recipes. Clicking one shows its ingredients, method and an empty nutrition panel.
+Then open http://localhost:5173. The Discover page shows the preferences form beside the recipe list (22 sample recipes, or about 1,500 after the optional import). Choose preferences and press "Update recommendations": allergies hide recipes and everything else reorders them. Clicking a recipe shows its ingredients, method and an empty nutrition panel. Until nutrition is calculated, protein, fat and calorie preferences are reported as "not applied yet". Recipes with ingredients whose allergen data is unverified carry a "Check labels" note, and the recipe page lists those ingredients.
+
+If you already have a local database, run `alembic upgrade head` first: the preferences table changed.
 
 ## Project layout
 
