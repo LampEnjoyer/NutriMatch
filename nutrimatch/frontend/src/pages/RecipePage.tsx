@@ -30,6 +30,21 @@ function TimeFacts({ recipe }: { recipe: RecipeDetail }) {
   )
 }
 
+/** Shown when we can't vouch for this recipe's allergen information, so the user checks for themselves. */
+function AllergenNotice({ recipe }: { recipe: RecipeDetail }) {
+  const names = recipe.unreviewed_ingredients.map((name) => name.toLowerCase())
+  return (
+    <div role="note" className="mt-6 max-w-prose border-l-4 border-tomato py-2 pl-4">
+      <p className="font-semibold text-tomato">Check ingredient labels if you have an allergy</p>
+      <p className="mt-1 font-serif text-meta">
+        {names.length > 0
+          ? `Allergen information is unverified for: ${names.join(', ')}. Brands vary, so read the packaging.`
+          : 'Some ingredient lines could not be fully read, so the allergen information may be incomplete.'}
+      </p>
+    </div>
+  )
+}
+
 function RecipeView({ recipe }: { recipe: RecipeDetail }) {
   const facts: string[] = []
   if (recipe.cuisine) {
@@ -52,6 +67,7 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
         <p className="mt-4 max-w-[60ch] font-serif text-lg leading-relaxed">{recipe.description}</p>
       ) : null}
       <TimeFacts recipe={recipe} />
+      {recipe.allergy_info_complete ? null : <AllergenNotice recipe={recipe} />}
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_20rem]">
         <div className="grid gap-10 md:grid-cols-[18rem_1fr]">
@@ -66,6 +82,7 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
                   <span>{line.name}</span>
                   {line.preparation_notes ? <span className="text-meta">, {line.preparation_notes}</span> : null}
                   {line.is_optional ? <span className="text-meta"> (optional)</span> : null}
+                  {line.allergens_reviewed ? null : <span className="text-sm text-tomato"> (allergens unverified)</span>}
                 </li>
               ))}
             </ul>

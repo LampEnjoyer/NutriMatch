@@ -1,4 +1,11 @@
-import type { RecipeDetail, RecipeList } from './types'
+import type {
+  PreferenceOptions,
+  Preferences,
+  PreferencesInput,
+  RecipeDetail,
+  RecipeList,
+  RecommendationList,
+} from './types'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api/v1'
 
@@ -41,4 +48,24 @@ export function listRecipes(limit = 50, offset = 0): Promise<RecipeList> {
 
 export function getRecipe(id: number): Promise<RecipeDetail> {
   return request<RecipeDetail>(`/recipes/${id}`)
+}
+
+export function getRecommendations(limit = 20, offset = 0): Promise<RecommendationList> {
+  return request<RecommendationList>(`/recommendations?limit=${limit}&offset=${offset}`)
+}
+
+export function getPreferenceOptions(): Promise<PreferenceOptions> {
+  return request<PreferenceOptions>('/preferences/options')
+}
+
+export function getPreferences(): Promise<Preferences> {
+  return request<Preferences>('/preferences')
+}
+
+export function savePreferences(preferences: PreferencesInput): Promise<Preferences> {
+  return request<Preferences>('/preferences', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(preferences),
+  })
 }
