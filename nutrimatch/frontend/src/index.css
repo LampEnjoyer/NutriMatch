@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #ffffff;
+  --color-ink: #000000;
+  --color-meta: #66695f;
+  --color-line: #e2e4de;
+  --color-basil: #2f6b3b;
+  --color-basil-dark: #24532d;
+  --color-tomato: #b8322a;
+
+  --font-sans: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Source Serif 4', ui-serif, Georgia, serif;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-basil);
+    outline-offset: 2px;
+  }
+}
+
+/* Condensed heavy numerals used on the nutrition-label panels. */
+@utility label-numeral {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}

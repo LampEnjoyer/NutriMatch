@@ -1,0 +1,567 @@
+{
+  "_note": "Sample recipes written for the NutriMatch prototype. They are not copied from a published source, so source_url is null. Nutrition is not stored here: it is computed from ingredients in Phase 3. A null quantity means 'to taste' and is excluded from nutrition totals.",
+  "source_name": "NutriMatch sample recipe",
+  "recipes": [
+    {
+      "slug": "classic-chicken-fettuccine-alfredo",
+      "title": "Classic Chicken Fettuccine Alfredo",
+      "description": "The traditional rich version: butter, heavy cream and plenty of Parmesan over seared chicken.",
+      "cuisine": "italian", "meal_type": "dinner",
+      "preparation_time_min": 10, "cooking_time_min": 25, "servings": 4,
+      "ingredients": [
+        {"ingredient": "fettuccine", "quantity": 12, "unit": "oz"},
+        {"ingredient": "chicken breast", "quantity": 1, "unit": "lb"},
+        {"ingredient": "olive oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "butter", "quantity": 4, "unit": "tbsp"},
+        {"ingredient": "garlic", "quantity": 3, "unit": "clove", "notes": "minced"},
+        {"ingredient": "heavy cream", "quantity": 1.5, "unit": "cup"},
+        {"ingredient": "parmesan cheese", "quantity": 90, "unit": "g", "notes": "finely grated"},
+        {"ingredient": "salt", "quantity": 1, "unit": "tsp", "notes": "divided"},
+        {"ingredient": "black pepper", "quantity": 0.5, "unit": "tsp"}
+      ],
+      "instructions": [
+        "Bring a large pot of salted water to a boil and cook the fettuccine until al dente. Reserve 1/2 cup of pasta water, then drain.",
+        "Season the chicken with half the salt and the pepper. Heat the olive oil in a large skillet over medium-high heat and cook the chicken 6-7 minutes per side, until it reads 165°F (74°C) inside. Rest 5 minutes, then slice.",
+        "In the same skillet over medium heat, melt the butter and cook the garlic for 1 minute.",
+        "Add the cream and the remaining salt. Simmer gently for 3-4 minutes until slightly thickened.",
+        "Turn the heat to low and stir in the Parmesan until smooth. Loosen with pasta water if needed.",
+        "Toss the fettuccine in the sauce and top with the sliced chicken."
+      ]
+    },
+    {
+      "slug": "lighter-chicken-alfredo-greek-yogurt",
+      "title": "Lighter Chicken Alfredo with Greek Yogurt",
+      "description": "A milk-and-yogurt sauce replaces the cream, with broccoli cooked in the pasta water.",
+      "cuisine": "italian", "meal_type": "dinner",
+      "preparation_time_min": 10, "cooking_time_min": 20, "servings": 4,
+      "ingredients": [
+        {"ingredient": "fettuccine", "quantity": 8, "unit": "oz"},
+        {"ingredient": "broccoli", "quantity": 200, "unit": "g"},
+        {"ingredient": "chicken breast", "quantity": 1.25, "unit": "lb"},
+        {"ingredient": "olive oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "garlic", "quantity": 3, "unit": "clove", "notes": "minced"},
+        {"ingredient": "milk", "quantity": 1, "unit": "cup"},
+        {"ingredient": "cornstarch", "quantity": 2, "unit": "tsp"},
+        {"ingredient": "greek yogurt", "quantity": 170, "unit": "g", "notes": "at room temperature"},
+        {"ingredient": "parmesan cheese", "quantity": 50, "unit": "g", "notes": "finely grated"},
+        {"ingredient": "salt", "quantity": 0.75, "unit": "tsp"},
+        {"ingredient": "black pepper", "quantity": 0.5, "unit": "tsp"}
+      ],
+      "instructions": [
+        "Cook the fettuccine in salted boiling water, adding the broccoli for the last 3 minutes. Reserve 1/2 cup of pasta water, then drain.",
+        "Season the chicken with salt and pepper. Cook in the olive oil over medium-high heat, 6-7 minutes per side, until 165°F (74°C) inside. Rest, then slice.",
+        "Lower the heat to medium and cook the garlic for 1 minute. Whisk the cornstarch into the milk, pour it in, and simmer 2-3 minutes, stirring, until thickened.",
+        "Take the pan off the heat and let it cool for 1 minute, then stir in the yogurt and Parmesan. Adding the yogurt off the heat keeps it from curdling.",
+        "Toss the pasta and broccoli in the sauce, loosen with pasta water, and top with the chicken."
+      ]
+    },
+    {
+      "slug": "high-protein-cottage-cheese-chicken-alfredo",
+      "title": "High-Protein Chicken Alfredo (Cottage Cheese Sauce)",
+      "description": "Blended cottage cheese makes a creamy sauce, and there's extra chicken per portion.",
+      "cuisine": "italian", "meal_type": "dinner",
+      "preparation_time_min": 10, "cooking_time_min": 20, "servings": 4,
+      "ingredients": [
+        {"ingredient": "fettuccine", "quantity": 8, "unit": "oz"},
+        {"ingredient": "chicken breast", "quantity": 1.5, "unit": "lb"},
+        {"ingredient": "olive oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "garlic", "quantity": 2, "unit": "clove", "notes": "minced"},
+        {"ingredient": "cottage cheese", "quantity": 450, "unit": "g"},
+        {"ingredient": "milk", "quantity": 0.5, "unit": "cup"},
+        {"ingredient": "parmesan cheese", "quantity": 40, "unit": "g", "notes": "finely grated"},
+        {"ingredient": "ground nutmeg", "quantity": 1, "unit": "pinch", "optional": true},
+        {"ingredient": "salt", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "black pepper", "quantity": 0.5, "unit": "tsp"}
+      ],
+      "instructions": [
+        "Cook the fettuccine in salted boiling water until al dente. Reserve 1/2 cup of pasta water, then drain.",
+        "Season the chicken with salt and pepper. Cook in the olive oil over medium-high heat, 6-7 minutes per side, until 165°F (74°C) inside. Rest, then slice.",
+        "Cook the garlic in the same pan for 1 minute, then scrape it into a blender with the cottage cheese, milk, Parmesan and nutmeg. Blend about 1 minute until completely smooth.",
+        "Return the sauce to the skillet over low heat and warm 2-3 minutes, stirring. Don't let it boil or it can turn grainy.",
+        "Toss the pasta in the sauce, loosen with pasta water, and top with the chicken."
+      ]
+    },
+    {
+      "slug": "one-pan-chicken-broccoli-alfredo",
+      "title": "One-Pan Chicken and Broccoli Alfredo",
+      "description": "Pasta simmers right in broth and milk, so the starch thickens the sauce and there's one pan to wash.",
+      "cuisine": "italian", "meal_type": "dinner",
+      "preparation_time_min": 10, "cooking_time_min": 30, "servings": 4,
+      "ingredients": [
+        {"ingredient": "chicken breast", "quantity": 1, "unit": "lb", "notes": "cut into 1-inch pieces"},
+        {"ingredient": "olive oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "butter", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "garlic", "quantity": 4, "unit": "clove", "notes": "minced"},
+        {"ingredient": "chicken broth", "quantity": 2.5, "unit": "cup"},
+        {"ingredient": "milk", "quantity": 1, "unit": "cup"},
+        {"ingredient": "fettuccine", "quantity": 8, "unit": "oz", "notes": "broken in half"},
+        {"ingredient": "broccoli", "quantity": 250, "unit": "g"},
+        {"ingredient": "parmesan cheese", "quantity": 60, "unit": "g", "notes": "finely grated"},
+        {"ingredient": "salt", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "black pepper", "quantity": 0.5, "unit": "tsp"}
+      ],
+      "instructions": [
+        "Season the chicken with salt and pepper. Cook in the olive oil over medium-high heat for 5-6 minutes until browned and 165°F (74°C) inside. Move to a plate.",
+        "Add the butter and garlic to the pan and cook for 1 minute. Add the broth and milk and bring to a simmer.",
+        "Add the fettuccine and simmer uncovered for 12-14 minutes, stirring often, until nearly tender.",
+        "Add the broccoli and cook 3-4 minutes more, until the pasta is tender and the liquid has reduced to a sauce.",
+        "Take the pan off the heat, stir in the Parmesan, and return the chicken."
+      ]
+    },
+    {
+      "slug": "baked-chicken-alfredo-pasta-bake",
+      "title": "Baked Chicken Alfredo Pasta Bake",
+      "description": "Penne, chicken and spinach in a Parmesan white sauce, baked under mozzarella.",
+      "cuisine": "italian", "meal_type": "dinner",
+      "preparation_time_min": 20, "cooking_time_min": 40, "servings": 6,
+      "ingredients": [
+        {"ingredient": "penne", "quantity": 1, "unit": "lb"},
+        {"ingredient": "chicken breast", "quantity": 1.5, "unit": "lb"},
+        {"ingredient": "olive oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "butter", "quantity": 3, "unit": "tbsp"},
+        {"ingredient": "garlic", "quantity": 3, "unit": "clove", "notes": "minced"},
+        {"ingredient": "all-purpose flour", "quantity": 3, "unit": "tbsp"},
+        {"ingredient": "milk", "quantity": 3, "unit": "cup"},
+        {"ingredient": "parmesan cheese", "quantity": 75, "unit": "g", "notes": "finely grated"},
+        {"ingredient": "baby spinach", "quantity": 140, "unit": "g"},
+        {"ingredient": "mozzarella cheese", "quantity": 150, "unit": "g", "notes": "shredded"},
+        {"ingredient": "salt", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "black pepper", "quantity": 0.5, "unit": "tsp"}
+      ],
+      "instructions": [
+        "Heat the oven to 375°F (190°C). Cook the penne 2 minutes less than the package time, then drain.",
+        "Season and cook the chicken in the olive oil over medium-high heat until 165°F (74°C) inside, then cut into bite-size pieces.",
+        "Melt the butter over medium heat and cook the garlic for 1 minute. Whisk in the flour and cook 1 minute, then gradually whisk in the milk. Simmer 4-5 minutes until thickened, then stir in the Parmesan, salt and pepper.",
+        "Combine the pasta, chicken, spinach and sauce in a 9x13-inch baking dish and top with the mozzarella.",
+        "Bake 20-25 minutes until bubbling and golden."
+      ]
+    },
+    {
+      "slug": "ground-beef-tacos",
+      "title": "Ground Beef Tacos",
+      "description": "Weeknight tacos with a homemade spice blend, crisp lettuce and cheddar.",
+      "cuisine": "mexican", "meal_type": "dinner",
+      "preparation_time_min": 10, "cooking_time_min": 15, "servings": 4,
+      "ingredients": [
+        {"ingredient": "ground beef", "quantity": 1, "unit": "lb"},
+        {"ingredient": "yellow onion", "quantity": 1, "unit": "piece", "notes": "small, diced"},
+        {"ingredient": "garlic", "quantity": 2, "unit": "clove", "notes": "minced"},
+        {"ingredient": "chili powder", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "ground cumin", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "smoked paprika", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "dried oregano", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "salt", "quantity": 0.75, "unit": "tsp"},
+        {"ingredient": "tomato paste", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "water", "quantity": 0.5, "unit": "cup"},
+        {"ingredient": "corn tortilla", "quantity": 8, "unit": "piece"},
+        {"ingredient": "romaine lettuce", "quantity": 80, "unit": "g", "notes": "shredded"},
+        {"ingredient": "roma tomato", "quantity": 2, "unit": "piece", "notes": "diced"},
+        {"ingredient": "cheddar cheese", "quantity": 60, "unit": "g", "notes": "shredded"},
+        {"ingredient": "lime", "quantity": 1, "unit": "piece", "notes": "cut into wedges", "optional": true}
+      ],
+      "instructions": [
+        "Brown the beef with the onion over medium-high heat for 6-8 minutes, breaking it up, until no pink remains. Drain excess fat.",
+        "Add the garlic, spices, salt and tomato paste and cook for 1 minute.",
+        "Add the water and simmer 3-5 minutes until thick.",
+        "Warm the tortillas in a dry skillet, about 30 seconds per side.",
+        "Fill with the beef, lettuce, tomato and cheese. Serve with lime wedges."
+      ]
+    },
+    {
+      "slug": "chickpea-spinach-curry",
+      "title": "Chickpea and Spinach Curry",
+      "description": "A quick vegan curry with tomatoes, light coconut milk and warm spices.",
+      "cuisine": "indian", "meal_type": "dinner",
+      "preparation_time_min": 10, "cooking_time_min": 25, "servings": 4,
+      "ingredients": [
+        {"ingredient": "canola oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "yellow onion", "quantity": 1, "unit": "piece", "notes": "diced"},
+        {"ingredient": "garlic", "quantity": 3, "unit": "clove", "notes": "minced"},
+        {"ingredient": "fresh ginger", "quantity": 1, "unit": "tbsp", "notes": "grated"},
+        {"ingredient": "garam masala", "quantity": 2, "unit": "tsp"},
+        {"ingredient": "ground cumin", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "ground turmeric", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "canned diced tomatoes", "quantity": 400, "unit": "g"},
+        {"ingredient": "canned chickpeas", "quantity": 480, "unit": "g", "notes": "drained and rinsed"},
+        {"ingredient": "light coconut milk", "quantity": 1, "unit": "cup"},
+        {"ingredient": "salt", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "baby spinach", "quantity": 140, "unit": "g"},
+        {"ingredient": "cilantro", "quantity": null, "unit": null, "notes": "chopped, to serve", "optional": true}
+      ],
+      "instructions": [
+        "Heat the oil over medium heat and cook the onion for 5-6 minutes until soft.",
+        "Add the garlic, ginger and spices and cook for 1 minute until fragrant.",
+        "Add the tomatoes, chickpeas, coconut milk and salt. Simmer 12-15 minutes.",
+        "Stir in the spinach until wilted, about 2 minutes.",
+        "Garnish with cilantro."
+      ]
+    },
+    {
+      "slug": "black-bean-avocado-tacos",
+      "title": "Black Bean and Avocado Tacos",
+      "description": "Spiced, half-mashed black beans with lime-dressed avocado and tomato.",
+      "cuisine": "mexican", "meal_type": "lunch",
+      "preparation_time_min": 10, "cooking_time_min": 10, "servings": 4,
+      "ingredients": [
+        {"ingredient": "olive oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "garlic", "quantity": 1, "unit": "clove", "notes": "minced"},
+        {"ingredient": "canned black beans", "quantity": 480, "unit": "g", "notes": "drained and rinsed"},
+        {"ingredient": "ground cumin", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "chili powder", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "salt", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "water", "quantity": 0.25, "unit": "cup"},
+        {"ingredient": "corn tortilla", "quantity": 8, "unit": "piece"},
+        {"ingredient": "avocado", "quantity": 1, "unit": "piece", "notes": "diced"},
+        {"ingredient": "roma tomato", "quantity": 1, "unit": "piece", "notes": "diced"},
+        {"ingredient": "lime", "quantity": 1, "unit": "piece", "notes": "juiced"},
+        {"ingredient": "cilantro", "quantity": null, "unit": null, "notes": "chopped, to serve", "optional": true}
+      ],
+      "instructions": [
+        "Cook the garlic in the oil over medium heat for 30 seconds. Add the beans, cumin, chili powder, salt and water. Simmer 5 minutes, mashing about half the beans.",
+        "Warm the tortillas in a dry skillet.",
+        "Toss the avocado and tomato with the lime juice.",
+        "Fill the tortillas with beans and the avocado mixture, and top with cilantro."
+      ]
+    },
+    {
+      "slug": "berry-greek-yogurt-overnight-oats",
+      "title": "Berry Greek Yogurt Overnight Oats",
+      "description": "Five minutes of prep the night before. Needs at least 6 hours in the fridge.",
+      "cuisine": "american", "meal_type": "breakfast",
+      "preparation_time_min": 5, "cooking_time_min": 0, "inactive_time_min": 360, "servings": 2,
+      "ingredients": [
+        {"ingredient": "rolled oats", "quantity": 80, "unit": "g"},
+        {"ingredient": "milk", "quantity": 1, "unit": "cup"},
+        {"ingredient": "greek yogurt", "quantity": 170, "unit": "g"},
+        {"ingredient": "chia seeds", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "honey", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "vanilla extract", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "mixed berries", "quantity": 150, "unit": "g"}
+      ],
+      "instructions": [
+        "Stir together the oats, milk, yogurt, chia seeds, honey and vanilla.",
+        "Divide between two jars and top with the berries.",
+        "Cover and refrigerate for at least 6 hours or overnight."
+      ]
+    },
+    {
+      "slug": "spinach-feta-scrambled-eggs",
+      "title": "Spinach and Feta Scrambled Eggs",
+      "description": "Soft-scrambled eggs with wilted spinach and salty feta.",
+      "cuisine": "mediterranean", "meal_type": "breakfast",
+      "preparation_time_min": 5, "cooking_time_min": 8, "servings": 2,
+      "ingredients": [
+        {"ingredient": "egg", "quantity": 5, "unit": "piece"},
+        {"ingredient": "milk", "quantity": 2, "unit": "tbsp"},
+        {"ingredient": "black pepper", "quantity": 0.25, "unit": "tsp"},
+        {"ingredient": "salt", "quantity": 1, "unit": "pinch"},
+        {"ingredient": "butter", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "baby spinach", "quantity": 60, "unit": "g"},
+        {"ingredient": "feta cheese", "quantity": 40, "unit": "g", "notes": "crumbled"}
+      ],
+      "instructions": [
+        "Whisk the eggs with the milk, pepper and salt.",
+        "Melt the butter over medium-low heat and wilt the spinach, about 1 minute.",
+        "Add the eggs and stir gently for 3-4 minutes until just set.",
+        "Take the pan off the heat and fold in the feta."
+      ]
+    },
+    {
+      "slug": "turkey-black-bean-chili",
+      "title": "Turkey and Black Bean Chili",
+      "description": "Lean ground turkey chili that holds up well for leftovers.",
+      "cuisine": "american", "meal_type": "dinner",
+      "preparation_time_min": 15, "cooking_time_min": 40, "servings": 6,
+      "ingredients": [
+        {"ingredient": "olive oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "ground turkey", "quantity": 1.25, "unit": "lb"},
+        {"ingredient": "yellow onion", "quantity": 1, "unit": "piece", "notes": "diced"},
+        {"ingredient": "red bell pepper", "quantity": 1, "unit": "piece", "notes": "diced"},
+        {"ingredient": "garlic", "quantity": 3, "unit": "clove", "notes": "minced"},
+        {"ingredient": "chili powder", "quantity": 2, "unit": "tbsp"},
+        {"ingredient": "ground cumin", "quantity": 2, "unit": "tsp"},
+        {"ingredient": "dried oregano", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "canned diced tomatoes", "quantity": 800, "unit": "g"},
+        {"ingredient": "canned black beans", "quantity": 480, "unit": "g", "notes": "drained and rinsed"},
+        {"ingredient": "chicken broth", "quantity": 1, "unit": "cup"},
+        {"ingredient": "salt", "quantity": 1, "unit": "tsp"}
+      ],
+      "instructions": [
+        "Heat the oil over medium-high heat and cook the turkey for 6-8 minutes until browned and no longer pink.",
+        "Add the onion and bell pepper and cook for 5 minutes.",
+        "Add the garlic and spices and cook for 1 minute.",
+        "Add the tomatoes, beans, broth and salt. Bring to a boil, then simmer partially covered for 25-30 minutes."
+      ]
+    },
+    {
+      "slug": "sheet-pan-lemon-salmon-asparagus",
+      "title": "Sheet-Pan Lemon Salmon with Asparagus",
+      "description": "Salmon and asparagus roasted together with garlic and lemon.",
+      "cuisine": "american", "meal_type": "dinner",
+      "preparation_time_min": 10, "cooking_time_min": 15, "servings": 4,
+      "ingredients": [
+        {"ingredient": "salmon fillet", "quantity": 1.5, "unit": "lb", "notes": "4 fillets"},
+        {"ingredient": "asparagus", "quantity": 450, "unit": "g", "notes": "trimmed"},
+        {"ingredient": "olive oil", "quantity": 2, "unit": "tbsp", "notes": "divided"},
+        {"ingredient": "garlic", "quantity": 2, "unit": "clove", "notes": "minced"},
+        {"ingredient": "lemon", "quantity": 1, "unit": "piece", "notes": "zested and juiced"},
+        {"ingredient": "salt", "quantity": 1, "unit": "tsp", "notes": "divided"},
+        {"ingredient": "black pepper", "quantity": 0.5, "unit": "tsp"}
+      ],
+      "instructions": [
+        "Heat the oven to 425°F (220°C).",
+        "Toss the asparagus with 1 tbsp oil and half the salt and spread it on a sheet pan.",
+        "Nestle the salmon among the asparagus. Brush with the remaining oil mixed with the garlic, lemon zest, remaining salt and pepper.",
+        "Roast 12-15 minutes until the salmon flakes easily and reads 145°F (63°C).",
+        "Squeeze the lemon juice over before serving."
+      ]
+    },
+    {
+      "slug": "garlic-shrimp-vegetable-stir-fry",
+      "title": "Garlic Shrimp and Vegetable Stir-Fry",
+      "description": "Shrimp, broccoli and bell pepper in a glossy soy-honey sauce.",
+      "cuisine": "chinese", "meal_type": "dinner",
+      "preparation_time_min": 15, "cooking_time_min": 10, "servings": 4,
+      "ingredients": [
+        {"ingredient": "soy sauce", "quantity": 3, "unit": "tbsp"},
+        {"ingredient": "honey", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "cornstarch", "quantity": 2, "unit": "tsp"},
+        {"ingredient": "water", "quantity": 0.25, "unit": "cup"},
+        {"ingredient": "canola oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "broccoli", "quantity": 250, "unit": "g"},
+        {"ingredient": "red bell pepper", "quantity": 1, "unit": "piece", "notes": "sliced"},
+        {"ingredient": "shrimp", "quantity": 1, "unit": "lb"},
+        {"ingredient": "garlic", "quantity": 3, "unit": "clove", "notes": "minced"},
+        {"ingredient": "fresh ginger", "quantity": 1, "unit": "tbsp", "notes": "grated"},
+        {"ingredient": "sesame oil", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "green onion", "quantity": 2, "unit": "piece", "notes": "sliced"}
+      ],
+      "instructions": [
+        "Whisk together the soy sauce, honey, cornstarch and water.",
+        "Heat the oil in a wok over high heat and stir-fry the broccoli and pepper for 3-4 minutes.",
+        "Add the shrimp, garlic and ginger and stir-fry 2-3 minutes until the shrimp are pink and opaque.",
+        "Add the sauce and toss for 1 minute until glossy. Drizzle with sesame oil and top with green onion."
+      ]
+    },
+    {
+      "slug": "lentil-vegetable-soup",
+      "title": "Lentil Vegetable Soup",
+      "description": "Brown lentils, carrots and tomatoes, finished with spinach and lemon.",
+      "cuisine": "mediterranean", "meal_type": "lunch",
+      "preparation_time_min": 15, "cooking_time_min": 40, "servings": 6,
+      "ingredients": [
+        {"ingredient": "olive oil", "quantity": 2, "unit": "tbsp"},
+        {"ingredient": "yellow onion", "quantity": 1, "unit": "piece", "notes": "diced"},
+        {"ingredient": "carrot", "quantity": 2, "unit": "piece", "notes": "diced"},
+        {"ingredient": "celery", "quantity": 2, "unit": "piece", "notes": "diced"},
+        {"ingredient": "garlic", "quantity": 3, "unit": "clove", "notes": "minced"},
+        {"ingredient": "ground cumin", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "smoked paprika", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "dried brown lentils", "quantity": 300, "unit": "g", "notes": "rinsed"},
+        {"ingredient": "canned diced tomatoes", "quantity": 400, "unit": "g"},
+        {"ingredient": "vegetable broth", "quantity": 6, "unit": "cup"},
+        {"ingredient": "baby spinach", "quantity": 100, "unit": "g"},
+        {"ingredient": "lemon", "quantity": 1, "unit": "piece", "notes": "juiced"},
+        {"ingredient": "salt", "quantity": 1, "unit": "tsp"}
+      ],
+      "instructions": [
+        "Heat the oil over medium heat and cook the onion, carrot and celery for 6-8 minutes.",
+        "Add the garlic, cumin and paprika and cook for 1 minute.",
+        "Add the lentils, tomatoes and broth. Bring to a boil, then cover and simmer 25-30 minutes until the lentils are tender.",
+        "Stir in the spinach, lemon juice and salt."
+      ]
+    },
+    {
+      "slug": "grilled-chicken-salad-lemon-vinaigrette",
+      "title": "Grilled Chicken Salad with Lemon Vinaigrette",
+      "description": "Romaine, cucumber and tomato with sliced grilled chicken and feta.",
+      "cuisine": "american", "meal_type": "lunch",
+      "preparation_time_min": 15, "cooking_time_min": 15, "servings": 2,
+      "ingredients": [
+        {"ingredient": "chicken breast", "quantity": 300, "unit": "g"},
+        {"ingredient": "olive oil", "quantity": 3, "unit": "tbsp", "notes": "divided"},
+        {"ingredient": "salt", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "black pepper", "quantity": 0.25, "unit": "tsp"},
+        {"ingredient": "lemon", "quantity": 1, "unit": "piece", "notes": "juiced"},
+        {"ingredient": "dijon mustard", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "honey", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "romaine lettuce", "quantity": 200, "unit": "g", "notes": "chopped"},
+        {"ingredient": "cucumber", "quantity": 1, "unit": "piece", "notes": "sliced"},
+        {"ingredient": "roma tomato", "quantity": 2, "unit": "piece", "notes": "chopped"},
+        {"ingredient": "feta cheese", "quantity": 40, "unit": "g", "notes": "crumbled"}
+      ],
+      "instructions": [
+        "Heat a grill or grill pan to medium-high. Brush the chicken with 1 tbsp oil, season with salt and pepper, and grill 5-7 minutes per side until 165°F (74°C) inside. Rest, then slice.",
+        "Whisk the remaining oil with the lemon juice, mustard, honey and a pinch of salt.",
+        "Toss the lettuce, cucumber and tomato with the dressing, then top with the chicken and feta."
+      ]
+    },
+    {
+      "slug": "peanut-butter-banana-smoothie",
+      "title": "Peanut Butter Banana Protein Smoothie",
+      "description": "Greek yogurt and peanut butter make this a filling snack.",
+      "cuisine": "american", "meal_type": "snack",
+      "preparation_time_min": 5, "cooking_time_min": 0, "servings": 1,
+      "ingredients": [
+        {"ingredient": "banana", "quantity": 1, "unit": "piece", "notes": "frozen in chunks for a thicker smoothie"},
+        {"ingredient": "peanut butter", "quantity": 2, "unit": "tbsp"},
+        {"ingredient": "greek yogurt", "quantity": 170, "unit": "g"},
+        {"ingredient": "milk", "quantity": 0.75, "unit": "cup"},
+        {"ingredient": "ground cinnamon", "quantity": 0.25, "unit": "tsp", "optional": true}
+      ],
+      "instructions": [
+        "Blend everything until smooth, about 1 minute."
+      ]
+    },
+    {
+      "slug": "crispy-tofu-vegetable-stir-fry",
+      "title": "Crispy Tofu Vegetable Stir-Fry",
+      "description": "Pan-crisped tofu with broccoli, pepper and carrot in a soy-maple glaze.",
+      "cuisine": "chinese", "meal_type": "dinner",
+      "preparation_time_min": 15, "cooking_time_min": 15, "servings": 4,
+      "ingredients": [
+        {"ingredient": "firm tofu", "quantity": 400, "unit": "g", "notes": "pressed and cubed"},
+        {"ingredient": "cornstarch", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "canola oil", "quantity": 2, "unit": "tbsp", "notes": "divided"},
+        {"ingredient": "broccoli", "quantity": 200, "unit": "g"},
+        {"ingredient": "red bell pepper", "quantity": 1, "unit": "piece", "notes": "sliced"},
+        {"ingredient": "carrot", "quantity": 1, "unit": "piece", "notes": "thinly sliced"},
+        {"ingredient": "garlic", "quantity": 2, "unit": "clove", "notes": "minced"},
+        {"ingredient": "fresh ginger", "quantity": 1, "unit": "tbsp", "notes": "grated"},
+        {"ingredient": "soy sauce", "quantity": 3, "unit": "tbsp"},
+        {"ingredient": "maple syrup", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "sesame oil", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "green onion", "quantity": 2, "unit": "piece", "notes": "sliced"}
+      ],
+      "instructions": [
+        "Toss the tofu cubes with the cornstarch.",
+        "Heat 1.5 tbsp oil over medium-high heat and fry the tofu 8-10 minutes, turning, until golden on all sides. Remove.",
+        "Add the remaining oil and stir-fry the broccoli, pepper and carrot for 4 minutes.",
+        "Add the garlic and ginger for 30 seconds, then the soy sauce, maple syrup and tofu. Toss for 1 minute.",
+        "Finish with sesame oil and green onion."
+      ]
+    },
+    {
+      "slug": "vegetable-egg-fried-rice",
+      "title": "Vegetable Egg Fried Rice",
+      "description": "Best with day-old rice. Peas, carrot and scrambled egg.",
+      "cuisine": "chinese", "meal_type": "dinner",
+      "preparation_time_min": 10, "cooking_time_min": 10, "servings": 3,
+      "ingredients": [
+        {"ingredient": "canola oil", "quantity": 2, "unit": "tbsp", "notes": "divided"},
+        {"ingredient": "egg", "quantity": 3, "unit": "piece", "notes": "beaten"},
+        {"ingredient": "carrot", "quantity": 1, "unit": "piece", "notes": "diced"},
+        {"ingredient": "frozen peas", "quantity": 120, "unit": "g"},
+        {"ingredient": "garlic", "quantity": 2, "unit": "clove", "notes": "minced"},
+        {"ingredient": "cooked white rice", "quantity": 600, "unit": "g", "notes": "chilled, preferably day-old"},
+        {"ingredient": "soy sauce", "quantity": 2, "unit": "tbsp"},
+        {"ingredient": "sesame oil", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "green onion", "quantity": 3, "unit": "piece", "notes": "sliced"}
+      ],
+      "instructions": [
+        "Heat 1 tbsp oil in a wok over medium-high heat and scramble the eggs until just set. Remove.",
+        "Add the remaining oil, carrot and peas and stir-fry 2-3 minutes. Add the garlic for 30 seconds.",
+        "Add the rice and stir-fry 3-4 minutes, breaking up clumps, until hot throughout.",
+        "Add the soy sauce, sesame oil, eggs and green onion and toss to combine."
+      ]
+    },
+    {
+      "slug": "weeknight-spaghetti-bolognese",
+      "title": "Weeknight Spaghetti Bolognese",
+      "description": "A meat sauce built on onion, carrot and celery, simmered for 20 minutes.",
+      "cuisine": "italian", "meal_type": "dinner",
+      "preparation_time_min": 10, "cooking_time_min": 35, "servings": 4,
+      "ingredients": [
+        {"ingredient": "olive oil", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "yellow onion", "quantity": 1, "unit": "piece", "notes": "finely diced"},
+        {"ingredient": "carrot", "quantity": 1, "unit": "piece", "notes": "finely diced"},
+        {"ingredient": "celery", "quantity": 1, "unit": "piece", "notes": "finely diced"},
+        {"ingredient": "ground beef", "quantity": 1, "unit": "lb"},
+        {"ingredient": "garlic", "quantity": 3, "unit": "clove", "notes": "minced"},
+        {"ingredient": "tomato paste", "quantity": 2, "unit": "tbsp"},
+        {"ingredient": "canned diced tomatoes", "quantity": 800, "unit": "g"},
+        {"ingredient": "italian seasoning", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "salt", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "black pepper", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "spaghetti", "quantity": 12, "unit": "oz"},
+        {"ingredient": "parmesan cheese", "quantity": 30, "unit": "g", "notes": "grated, to serve", "optional": true}
+      ],
+      "instructions": [
+        "Heat the oil over medium heat and cook the onion, carrot and celery for 6-7 minutes until soft.",
+        "Raise the heat, add the beef, and brown 6-8 minutes. Drain excess fat.",
+        "Add the garlic and tomato paste and cook 1-2 minutes.",
+        "Add the tomatoes, Italian seasoning, salt and pepper and simmer 20 minutes.",
+        "Meanwhile, cook the spaghetti until al dente. Toss with the sauce and top with Parmesan."
+      ]
+    },
+    {
+      "slug": "homemade-hummus-veggie-plate",
+      "title": "Homemade Hummus and Veggie Plate",
+      "description": "Smooth tahini hummus with raw vegetable sticks for dipping.",
+      "cuisine": "mediterranean", "meal_type": "snack",
+      "preparation_time_min": 15, "cooking_time_min": 0, "servings": 4,
+      "ingredients": [
+        {"ingredient": "canned chickpeas", "quantity": 240, "unit": "g", "notes": "drained and rinsed"},
+        {"ingredient": "tahini", "quantity": 3, "unit": "tbsp"},
+        {"ingredient": "lemon", "quantity": 1, "unit": "piece", "notes": "juiced"},
+        {"ingredient": "garlic", "quantity": 1, "unit": "clove"},
+        {"ingredient": "ground cumin", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "salt", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "olive oil", "quantity": 2, "unit": "tbsp"},
+        {"ingredient": "water", "quantity": 3, "unit": "tbsp", "notes": "cold"},
+        {"ingredient": "carrot", "quantity": 2, "unit": "piece", "notes": "cut into sticks"},
+        {"ingredient": "cucumber", "quantity": 1, "unit": "piece", "notes": "cut into sticks"},
+        {"ingredient": "red bell pepper", "quantity": 1, "unit": "piece", "notes": "cut into strips"}
+      ],
+      "instructions": [
+        "Blend the chickpeas, tahini, lemon juice, garlic, cumin and salt for 1 minute.",
+        "With the blender running, add the olive oil and water until smooth and creamy, 1-2 minutes.",
+        "Serve with the vegetable sticks."
+      ]
+    },
+    {
+      "slug": "oat-cottage-cheese-protein-pancakes",
+      "title": "Oat and Cottage Cheese Protein Pancakes",
+      "description": "Blender pancakes made from oats, eggs and cottage cheese.",
+      "cuisine": "american", "meal_type": "breakfast",
+      "preparation_time_min": 5, "cooking_time_min": 15, "servings": 2,
+      "ingredients": [
+        {"ingredient": "rolled oats", "quantity": 80, "unit": "g"},
+        {"ingredient": "cottage cheese", "quantity": 225, "unit": "g"},
+        {"ingredient": "egg", "quantity": 2, "unit": "piece"},
+        {"ingredient": "baking powder", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "vanilla extract", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "ground cinnamon", "quantity": 0.5, "unit": "tsp"},
+        {"ingredient": "butter", "quantity": 1, "unit": "tsp", "notes": "for the pan"},
+        {"ingredient": "mixed berries", "quantity": 100, "unit": "g", "notes": "to serve", "optional": true}
+      ],
+      "instructions": [
+        "Blend the oats until floury. Add the cottage cheese, eggs, baking powder, vanilla and cinnamon and blend until smooth. Rest 5 minutes.",
+        "Heat a nonstick skillet over medium heat and lightly butter it.",
+        "Pour 1/4 cup of batter per pancake. Cook 2-3 minutes until bubbles form, flip, and cook 1-2 minutes more.",
+        "Top with berries."
+      ]
+    },
+    {
+      "slug": "tuna-salad-lettuce-wraps",
+      "title": "Tuna Salad Lettuce Wraps",
+      "description": "Greek yogurt tuna salad with celery and lemon, served in romaine leaves.",
+      "cuisine": "american", "meal_type": "lunch",
+      "preparation_time_min": 10, "cooking_time_min": 0, "servings": 2,
+      "ingredients": [
+        {"ingredient": "canned tuna", "quantity": 225, "unit": "g", "notes": "drained"},
+        {"ingredient": "greek yogurt", "quantity": 60, "unit": "g"},
+        {"ingredient": "light mayonnaise", "quantity": 1, "unit": "tbsp"},
+        {"ingredient": "dijon mustard", "quantity": 1, "unit": "tsp"},
+        {"ingredient": "celery", "quantity": 1, "unit": "piece", "notes": "finely diced"},
+        {"ingredient": "lemon", "quantity": 0.5, "unit": "piece", "notes": "juiced"},
+        {"ingredient": "black pepper", "quantity": 0.25, "unit": "tsp"},
+        {"ingredient": "romaine lettuce", "quantity": 120, "unit": "g", "notes": "about 8 large leaves"}
+      ],
+      "instructions": [
+        "Mix the tuna, yogurt, mayonnaise, mustard, celery, lemon juice and pepper.",
+        "Spoon into the lettuce leaves."
+      ]
+    }
+  ]
+}
