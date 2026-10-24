@@ -137,3 +137,29 @@ class PreferenceQuestion(BaseModel):
 
 class PreferenceOptions(BaseModel):
     questions: list[PreferenceQuestion]
+
+
+class ScoreComponent(BaseModel):
+    """How well a recipe fits one preference (0 to 1). `known` is False when the recipe had no data for it."""
+
+    key: str
+    score: float
+    known: bool
+
+
+class RecommendationItem(RecipeSummary):
+    score: float
+    components: list[ScoreComponent]
+    # Ingredients with unverified allergen data; the user should check those labels.
+    unreviewed_ingredients: list[str]
+    allergy_info_complete: bool
+
+
+class RecommendationList(BaseModel):
+    items: list[RecommendationItem]
+    # Recipes that remain after allergy filtering.
+    total: int
+    excluded_for_allergies: int
+    # Preferences that shaped the order, and those that could not be applied because no recipe has the data yet.
+    ranked_by: list[str]
+    ignored_preferences: list[str]
