@@ -1,0 +1,2 @@
+# Only needed to regenerate the imported recipe data (python -m tools.recipenlg.build).
+pyarrow==26.0.0
