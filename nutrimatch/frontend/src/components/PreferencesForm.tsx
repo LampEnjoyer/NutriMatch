@@ -107,7 +107,8 @@ export function PreferencesForm({ questions, value, onChange, onSubmit, dirty, s
         <Question key={question.id} question={question} value={value} onChange={onChange} />
       ))}
 
-      <div className="flex flex-wrap items-center gap-3 border-t border-line pt-4">
+      {/* Stays in view at the bottom of the panel while the questions scroll. */}
+      <div className="sticky bottom-0 flex flex-wrap items-center gap-3 border-t border-line bg-paper py-4">
         <button
           type="submit"
           disabled={!dirty || saving}

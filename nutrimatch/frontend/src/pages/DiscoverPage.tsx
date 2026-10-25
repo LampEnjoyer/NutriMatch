@@ -303,7 +303,10 @@ function Discover({ questions, initial }: { questions: PreferenceQuestion[]; ini
         <section aria-label="Recommended recipes">
           <Results preferences={saved} query={query} version={version} />
         </section>
-        <aside aria-label="Preferences" className="lg:sticky lg:top-6 lg:self-start">
+        <aside
+          aria-label="Preferences"
+          className="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:pr-3"
+        >
           <h2 className="mb-4 text-xl font-bold">Preferences</h2>
           <PreferencesForm
             questions={questions}
