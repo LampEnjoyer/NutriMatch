@@ -9,15 +9,15 @@ const NAV_ITEMS = [
 function navClass({ isActive }: { isActive: boolean }): string {
   const base = 'whitespace-nowrap border-b-2 px-1 py-3 text-[15px]'
   if (isActive) {
-    return `${base} border-ink font-semibold text-ink`
+    return `${base} border-white font-semibold text-white`
   }
-  return `${base} border-transparent text-meta hover:text-ink`
+  return `${base} border-transparent text-white/70 hover:text-white`
 }
 
 export function AppShell() {
   return (
     <div className="min-h-screen">
-      <header className="border-b border-line">
+      <header className="bg-basil text-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 pt-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8 sm:px-6">
           <NavLink to="/" className="pb-1 text-2xl font-black tracking-tight [font-stretch:85%] sm:pb-3">
             NutriMatch
