@@ -43,7 +43,7 @@ function AllergenNotice({ recipe }: { recipe: RecipeDetail }) {
       <p className="font-semibold text-tomato">Check ingredient labels if you have an allergy</p>
       <p className="mt-1 font-serif text-meta">
         {names.length > 0
-          ? `Allergen information is unverified for: ${names.join(', ')}. Brands vary, so read the packaging.`
+          ? `Allergen information is unverified for: ${names.join(', ')}. Read the packaging carefully.`
           : 'Some ingredient lines could not be fully read, so the allergen information may be incomplete.'}
       </p>
     </div>

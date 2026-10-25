@@ -135,7 +135,7 @@ function emptyHint(list: RecommendationList, query: string): string {
       ? 'Every recipe matching your search contains an allergen you selected. Change your allergies or search for something else.'
       : 'Every recipe contains an allergen you selected. Change your allergies to see more.'
   }
-  return query ? 'Try a different word, or clear the search to see every recipe.' : 'Run the seed script on the backend to load recipes.'
+  return query ? 'Try a different word, or clear the search to see every recipe.' : 'No recipes available.'
 }
 
 function SearchBar({ value, onChange }: { value: string; onChange: (text: string) => void }) {

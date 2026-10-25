@@ -13,13 +13,13 @@ export function SavedPage() {
     <div>
       <h1 className="text-4xl font-black tracking-tight [font-stretch:85%]">Saved recipes</h1>
       <p className="mt-3 max-w-[60ch] font-serif text-lg text-meta">
-        Recipes you save with the + button are kept here in this browser.
+        Recipes you save with the (+) button are kept here in this browser.
       </p>
 
       <div className="mt-10">
         {recipes.length === 0 ? (
           <StatusMessage kind="empty" title="Nothing saved yet">
-            Press + Save on any recipe to add it here.{' '}
+            Press (+ Save) on any recipe to add it here.{' '}
             <Link to="/" className="text-basil underline">
               Browse recipes
             </Link>

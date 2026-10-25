@@ -62,7 +62,7 @@ function Checklist({ recipes, checked }: { recipes: GroceryRecipe[]; checked: st
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-b-2 border-ink pb-1">
         <h2 className="text-lg font-bold">Ingredients</h2>
         <p className="text-sm text-meta">
-          {done.length} of {items.length} ticked off
+          {done.length} of {items.length}
         </p>
       </div>
       <ul>
@@ -71,7 +71,7 @@ function Checklist({ recipes, checked }: { recipes: GroceryRecipe[]; checked: st
         ))}
       </ul>
       <p className="mt-3 text-sm text-meta">
-        Amounts in the same unit are added up; amounts in different units are listed separately.
+        Amounts in the same unit are added up, and amounts in different units are listed separately.
       </p>
       {done.length > 0 ? (
         <button type="button" onClick={uncheckAll} className="mt-4 text-sm text-meta underline hover:text-ink">
@@ -91,7 +91,7 @@ export function GroceryPage() {
     <div>
       <h1 className="text-4xl font-black tracking-tight [font-stretch:85%]">Grocery list</h1>
       <p className="mt-3 max-w-[60ch] font-serif text-lg text-meta">
-        Pick recipes and their ingredients are combined into one checklist. It's kept in this browser.
+        Pick recipes and their ingredients are combined into one checklist.
       </p>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[18rem_1fr]">
@@ -147,7 +147,7 @@ export function GroceryPage() {
         <section aria-label="Shopping checklist">
           {recipes.length === 0 ? (
             <StatusMessage kind="empty" title="Your grocery list is empty">
-              Press + Grocery list on a recipe, or add one of your saved recipes.{' '}
+              Press (+ Grocery list) on a recipe, or add one of your saved recipes.{' '}
               <Link to="/" className="text-basil underline">
                 Browse recipes
               </Link>

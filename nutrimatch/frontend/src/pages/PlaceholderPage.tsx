@@ -3,7 +3,7 @@ interface Props {
   description: string
 }
 
-/** Stand-in for pages that later phases build out. */
+/** Placeholder page **/
 export function PlaceholderPage({ title, description }: Props) {
   return (
     <div>
