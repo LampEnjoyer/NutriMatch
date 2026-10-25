@@ -11,7 +11,7 @@ export function SavedPage() {
 
   return (
     <div>
-      <h1 className="text-4xl font-black tracking-tight [font-stretch:85%]">Saved recipes</h1>
+      <h1 className="text-4xl font-black tracking-tight [font-stretch:85%] sm:text-5xl">Saved recipes</h1>
       <p className="mt-3 max-w-[60ch] font-serif text-lg text-meta">
         Recipes you save with the (+) button are kept here in this browser.
       </p>

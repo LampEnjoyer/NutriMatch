@@ -89,7 +89,7 @@ export function GroceryPage() {
 
   return (
     <div>
-      <h1 className="text-4xl font-black tracking-tight [font-stretch:85%]">Grocery list</h1>
+      <h1 className="text-4xl font-black tracking-tight [font-stretch:85%] sm:text-5xl">Grocery list</h1>
       <p className="mt-3 max-w-[60ch] font-serif text-lg text-meta">
         Pick recipes and their ingredients are combined into one checklist.
       </p>
