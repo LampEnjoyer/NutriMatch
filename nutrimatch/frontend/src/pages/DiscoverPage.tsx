@@ -140,7 +140,7 @@ function emptyHint(list: RecommendationList, query: string): string {
 
 function SearchBar({ value, onChange }: { value: string; onChange: (text: string) => void }) {
   return (
-    <form role="search" onSubmit={(event) => event.preventDefault()} className="mt-8 flex max-w-xl items-center gap-3">
+    <form role="search" onSubmit={(event) => event.preventDefault()} className="flex max-w-xl items-center gap-3">
       <input
         type="search"
         value={value}
@@ -298,10 +298,12 @@ function Discover({ questions, initial }: { questions: PreferenceQuestion[]; ini
 
   return (
     <>
-      <SearchBar value={searchText} onChange={setSearchText} />
-      <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_18rem]">
+      <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_18rem]">
         <section aria-label="Recommended recipes">
-          <Results preferences={saved} query={query} version={version} />
+          <SearchBar value={searchText} onChange={setSearchText} />
+          <div className="mt-10">
+            <Results preferences={saved} query={query} version={version} />
+          </div>
         </section>
         <aside
           aria-label="Preferences"
