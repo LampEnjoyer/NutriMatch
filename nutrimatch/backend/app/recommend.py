@@ -1,8 +1,4 @@
-"""Loads recipes from the database, ranks them for a user and builds the response.
-
-The ranking itself lives in app.ranking. Per-serving nutrition is read from NutritionFacts; recipes
-without a row simply have no value, and ranking treats that as unknown.
-"""
+"""Loads recipes from the database, ranks them for a user and builds the response."""
 
 from sqlalchemy import ColumnElement, or_, select
 from sqlalchemy.orm import Session, defer

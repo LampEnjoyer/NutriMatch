@@ -1,9 +1,4 @@
-"""Unit conversion.
-
-Mass and volume factors are exact definitions (US customary volume), not estimates.
-Converting between mass, volume and counts needs ingredient-specific data
-(density_g_per_ml, grams_per_count); when that data is missing, conversion returns None
-and callers must report the amount as not convertible rather than guess.
+"""Unit conversion scripts for mass, volume, and count measurements.
 """
 
 MASS = "mass"

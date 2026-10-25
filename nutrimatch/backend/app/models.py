@@ -1,20 +1,10 @@
-"""SQLAlchemy models.
+"""SQLAlchemy models
 
-Follows spec section 8, with these additions:
-- Ingredient.allergens / animal_category / allergens_reviewed: needed so allergies and diets
-  can be hard filters, and so an ingredient whose allergens nobody has reviewed is treated
-  as "unknown" rather than "safe".
-- Recipe.slug (stable seed/import key) and Recipe.inactive_time_min (e.g. overnight chilling,
-  shown separately so "5 minute" overnight oats don't pass as a quick breakfast unannounced).
-- RecipeIngredient.position / is_optional.
-- Recipe.ingredients_complete: False when some ingredient lines could not be structured
-  (e.g. an import with free-text measures). Such recipes are never reported allergy-safe.
-- UserPreferences: coarse levels (nutrient_levels, time_preference, meal_types, meal_size) instead of
-  numeric targets. Allergies are the only hard filter.
-- User.timezone: so daily nutrition totals use the user's calendar day.
-- MealLog.meal_slot, GroceryListItem.notes / source_recipe_ids.
-- Store, ProductPrice, IngredientProductMatch and Ingredient pricing fields: retailer prices
-  (Kroger), always tied to a store and a fetch time.
+Users
+Recipes
+Ingredients
+Nutrition facts
+Prices
 """
 
 from datetime import UTC, datetime

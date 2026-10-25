@@ -1,7 +1,4 @@
-"""Controlled vocabularies shared by models, seed validation and (later) API schemas.
-
-Kept as plain frozensets so validation is an explicit membership check.
-"""
+"""Controlled vocabularies (constants)"""
 
 MASS_UNITS = frozenset({"g", "kg", "oz", "lb"})
 VOLUME_UNITS = frozenset({"ml", "l", "tsp", "tbsp", "cup", "fl_oz"})

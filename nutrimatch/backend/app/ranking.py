@@ -1,18 +1,12 @@
-"""Ranks recipes against a user's preferences. Pure functions over plain data: no database, no I/O.
+"""Ranks recipes against a user's preferences.
 
 Two stages:
 
-1. Hard filter. A recipe is dropped if any of its ingredients lists one of the user's allergens.
+1. Hard filter on allergens.
    An ingredient whose allergen data is unreviewed is NOT treated as a match for allergens it does not
    list (we cannot know), so those recipes stay in and are flagged for the user to check.
 2. Soft ranking. Each active preference becomes a score from 0 to 1, and a recipe's score is the
    weighted average of those. "Active" means the user chose something other than "don't care".
-
-There are no absolute thresholds anywhere. "High protein", "short time" and "family meal" are judged
-by where a recipe falls among the recipes still in the running (its percentile), so the ranking
-adapts to whatever data exists. A recipe with no value for a preference scores a neutral 0.5 on it.
-If no recipe in the pool has a value (for example nutrition has not been computed yet), the preference
-is reported as ignored instead of silently changing nothing.
 """
 
 from bisect import bisect_left, bisect_right

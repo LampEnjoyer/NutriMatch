@@ -1,8 +1,4 @@
-"""The preference questions, as data.
-
-The frontend renders the form from GET /preferences/options, so changing or adding a question
-means editing this list (plus vocab.py and, for a new field, PreferencesIn), not the UI.
-"""
+"""Data representation of user preference options"""
 
 from app import vocab
 from app.schemas import PreferenceOption, PreferenceOptions, PreferenceQuestion
