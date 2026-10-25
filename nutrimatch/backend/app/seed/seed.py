@@ -1,10 +1,6 @@
 """Load the sample ingredient catalog, sample recipes and the demo user.
 
 Run from backend/:  python -m app.seed.seed
-
-Validation runs first and nothing is written if any check fails. Seeding is idempotent:
-ingredients are matched on normalized_name and recipes on slug, so re-running updates
-records in place instead of duplicating them.
 """
 
 import json

@@ -1,4 +1,4 @@
-"""Parse RecipeNLG-style recipe text into structured recipes. Pure functions, no I/O."""
+"""Parse RecipeNLG-style recipe text into structured recipes."""
 
 import re
 

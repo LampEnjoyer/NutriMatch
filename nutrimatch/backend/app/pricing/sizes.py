@@ -1,8 +1,4 @@
-"""Parse retailer package-size text such as "1/2 gal", "16 oz", "32 fl oz", "12 ct".
-
-Anything that doesn't match a known pattern returns None. The caller then treats the
-product as unpriceable rather than guessing its size.
-"""
+"""Parse retailer package-size text such as "1/2 gal", "16 oz", "32 fl oz", "12 ct"."""
 
 import re
 from dataclasses import dataclass

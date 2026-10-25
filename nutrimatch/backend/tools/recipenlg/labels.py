@@ -1,12 +1,5 @@
 """Allergen and animal-category labels for the ingredients that appear in the imported recipes.
-
-Labels are assigned explicitly per ingredient, not guessed from keywords. A label is marked
-reviewed only when the allergen list is known to be complete: single-ingredient foods
-(flour, shrimp, sesame seed) and products whose allergens never vary. Blended or branded products
-(soups, mixes, sauces, cereals, processed meats) list their likely allergens but stay unreviewed,
-so allergy filters treat them as unknown rather than safe.
-
-Ingredients missing from this table are emitted as unreviewed with no allergens; build.py reports them.
+Ingredients missing from this table are emitted as unreviewed with no allergens.
 """
 
 from dataclasses import dataclass

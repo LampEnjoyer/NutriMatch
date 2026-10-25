@@ -1,8 +1,4 @@
-"""Recipe read endpoints.
-
-Phase 1 scope: list (unranked, paginated) and detail. Search, hard filtering and ranking
-replace the list behaviour in Phase 2.
-"""
+"""Recipe read endpoints."""
 
 from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy import func, select

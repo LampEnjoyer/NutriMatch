@@ -1,4 +1,4 @@
-"""Minimal client for the Kroger Public API (client-credentials flow, public data only).
+"""Minimal client for the Kroger Public API.
 
 Endpoints and limits used here (checked against a maintained client library, Oct 2026):
 - POST /v1/connect/oauth2/token   HTTP Basic client_id:client_secret, grant_type=client_credentials

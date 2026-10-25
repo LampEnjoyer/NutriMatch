@@ -1,6 +1,4 @@
 """Pure logic for picking a store product for an ingredient and costing a recipe amount.
-
-No I/O here, so every rule is unit-testable.
 """
 
 import math

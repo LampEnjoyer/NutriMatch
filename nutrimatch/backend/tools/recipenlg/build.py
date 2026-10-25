@@ -6,9 +6,8 @@ Run from backend/ (needs pyarrow, see requirements-tools.txt):
 
 Writes app/seed/data/recipenlg_recipes.json and recipenlg_ingredients.json. Selection is
 deterministic for a given shard and --seed. Recipes are kept only when they:
-  - state their servings (the dataset has no servings field, so "Serves 4." in the directions is used),
-  - have ingredient lines that parse to a name and a convertible amount (an unsized can is allowed
-    and becomes an unmeasured line),
+  - state their servings,
+  - have ingredient lines that parse to a name and a convertible amount,
   - use only the most common ingredient names, so every ingredient can be labelled for allergens.
 """
 

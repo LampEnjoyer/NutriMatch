@@ -1,8 +1,4 @@
-"""Store pricing: match ingredients to store products and cost a recipe.
-
-Every price shown comes from a ProductPrice row fetched from the provider, tied to a store
-and a fetch time. When a line can't be priced, the line says why; nothing is estimated.
-"""
+"""Store pricing: match ingredients to store products and cost a recipe (when possible)."""
 
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
