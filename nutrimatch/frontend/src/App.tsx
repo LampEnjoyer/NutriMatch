@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 
 import { AppShell } from './components/AppShell'
+import { AboutPage } from './pages/AboutPage'
 import { DiscoverPage } from './pages/DiscoverPage'
 import { GroceryPage } from './pages/GroceryPage'
 import { PlaceholderPage } from './pages/PlaceholderPage'
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="recipes/:recipeId" element={<RecipePage />} />
           <Route path="saved" element={<SavedPage />} />
           <Route path="grocery" element={<GroceryPage />} />
+          <Route path="about" element={<AboutPage />} />
           <Route
             path="*"
             element={<PlaceholderPage title="Page not found" description="Check the address, or go back to Discover." />}

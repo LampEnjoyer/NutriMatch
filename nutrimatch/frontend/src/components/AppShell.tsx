@@ -4,6 +4,7 @@ const NAV_ITEMS = [
   { to: '/', label: 'Discover', end: true },
   { to: '/saved', label: 'Saved' },
   { to: '/grocery', label: 'Grocery list' },
+  { to: '/about', label: 'About' },
 ]
 
 function navClass({ isActive }: { isActive: boolean }): string {

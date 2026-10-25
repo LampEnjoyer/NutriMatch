@@ -329,8 +329,11 @@ export function DiscoverPage() {
   return (
     <div>
       <h1 className="text-4xl font-black tracking-tight [font-stretch:85%] sm:text-5xl">Find your next meal</h1>
-      <p className="mt-3 max-w-[60ch] font-serif text-lg text-meta">
-        Pick your preferences and discover tailored recipes.
+      <p className="mt-3 max-w-[70ch] font-serif text-lg text-meta">
+        Home cooking is, for many reasons, better than eating out.{' '}
+        <Link to="/about" className="text-basil underline">
+          Learn more
+        </Link>
       </p>
 
       {setup.status === 'loading' ? (
